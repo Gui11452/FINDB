@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block estilos %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/chamadas_video.css' %}">
+{% endblock %}
+{% block titulo %}
+    Chamadas de Vídeo - FINDB
+{% endblock %}
+
+{% block container %} 
+
+    <main class="container">
+        <div>
+            {% if page_obj %}
+                <h1>
+                    Chamadas de Vídeo ({{qtd}})
+                </h1>
+                {% include 'parciais/_messages.html' %}
+                <div class="chamadas-video">
+                    {% for chamada_video in page_obj %}
+                        <div class="chamada-video">
+                            <div>
+                                {% if chamada_video.remetente.slug != request.session.get_perfil_slug %}
+                                    {% if chamada_video.remetente.foto %}
+                                        <a href="{% url 'perfil' chamada_video.remetente.slug %}">
+                                            <img src="{{chamada_video.remetente.foto.url}}" alt="{{chamada_video.remetente.nome}} - FINDB">
+                                        </a>
+                                    {% else %}
+                                        <img id="foto_user" src="{% static 'images/foto_user.png' %}" alt="{{chamada_video.remetente.nome}} - FINDB">
+                                    {% endif %}
+                                {% else %}
+                                    <img id="foto_user" src="{% static 'images/video-chamada.png' %}" alt="{{chamada_video.remetente.nome}} - FINDB">
+                                {% endif %}
+                                <div>
+                                    {% if chamada_video.remetente.slug != request.session.get_perfil_slug %}
+                                        <h3>
+                                            "{{chamada_video.remetente.nome}}" te convidou
+                                        </h3>
+                                        {% if chamada_video.confirmacao == 'Confirmado' %}
+                                            <h4 style="color: green;">
+                                                Você confirmou o convite
+                                            </h4>
+                                        {% elif chamada_video.confirmacao == 'Rejeitado' %}
+                                            <h4 style="color: red;">
+                                                Você rejeitou o convite
+                                            </h4>
+                                        {% else %}
+                                            <h4 style="color: rgb(211, 138, 4);">
+                                                "{{chamada_video.remetente.nome}}" está aguardando a sua confirmação. Confirme ou rejeite o convite.
+                                            </h4>
+                                        {% endif %}
+                                    {% else %}
+                                        <h3>
+                                            Você convidou "{{chamada_video.destinatario.nome}}"
+                                        </h3>
+                                        {% if chamada_video.confirmacao == 'Confirmado' %}
+                                            <h4 style="color: green;">
+                                                "{{chamada_video.destinatario.nome}}" confirmou o seu convite
+                                            </h4>
+                                        {% elif chamada_video.confirmacao == 'Rejeitado' %}
+                                            <h4 style="color: red;">
+                                                "{{chamada_video.destinatario.nome}}" rejeitou o seu convite
+                                            </h4>
+                                        {% else %}
+                                            <h4 style="color: rgb(211, 138, 4);">
+                                                Aguarde a confirmação de "{{chamada_video.destinatario.nome}}". Você será notificado quando ele(a) confirmar ou não
+                                            </h4>
+                                        {% endif %}
+                                    {% endif %}
+                                    <div class="botoes">
+                                        <a href="{% url 'chamada_video' chamada_video.id %}">
+                                            <i class="fa-regular fa-calendar-days"></i>
+                                            Ver mais
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <p>
+                                <strong>
+                                    Data e Horário:
+                                </strong>
+                                {{chamada_video.data}}
+                            </p>    
+
+                            {% if data_hoje > chamada_video.data %}
+                                <section class="situacao">
+                                    <strong>
+                                        Situação da chamada: 
+                                    </strong>
+                                    <p class="confirmacao pendente">
+                                        Expirada
+                                    </p>
+                                </section>
+                            {% endif %}
+                            
+                            <section class="barra-confirmacao">
+                                <strong>
+                                    Confirmação:
+                                </strong>
+                                {% if chamada_video.confirmacao == 'Confirmado' %}
+                                    <p class="confirmacao confirmado">
+                                        Confirmado
+                                    </p>
+                                {% elif chamada_video.confirmacao == 'Rejeitado' %}
+                                    <p class="confirmacao rejeitado">
+                                        Rejeitado
+                                    </p>
+                                {% else %}
+                                    <p class="confirmacao pendente">
+                                        Pendente
+                                    </p>
+                                {% endif %}
+                            </section>
+                            
+                            {% if chamada_video.descricao %}
+                                <p class="descricao">
+                                    <strong>
+                                        Mensagem:
+                                    </strong>
+                                    {{chamada_video.descricao}}
+                                </p>
+                            {% endif %}
+                            {% if chamada_video.cupido %}
+                                <section class="cupido">
+                                    <strong>
+                                        Cupido:
+                                    </strong>
+                                    <a href="{% url 'cupido' chamada_video.cupido.slug %}">
+                                        {% if chamada_video.cupido.foto %}
+                                            <img src="{{chamada_video.cupido.foto.url}}" alt="{{chamada_video.cupido.nome}} - FINDB">
+                                        {% else %}
+                                            <img src="{% static 'images/foto_user.png' %}" alt="{{chamada_video.cupido.nome}} - FINDB">
+                                        {% endif %}
+                                        {{chamada_video.cupido.nome}}
+                                    </a>
+                                </section>
+                            {% else %}
+                                <p>
+                                    <strong>
+                                        Tem cupido?
+                                    </strong>
+                                    não
+                                </p>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+                {% include 'parciais/_pagination_evento.html' %}
+            {% else %}
+                <h1>
+                    Chamadas de Vídeo (0)
+                </h1>
+            {% endif %}
+        </div>
+    </main>
+
+{% endblock %}
+

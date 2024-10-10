@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block estilos %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/convite_chamada_video_enviado.css' %}">
+{% endblock %}
+{% block titulo %}
+    Convite para Chamada de Vídeo Enviado - FINDB
+{% endblock %}
+
+{% block container %} 
+
+    <main class="container">
+        <div>
+            <div class="convite">
+                <img src="{% static 'images/logo.jpeg' %}" alt="Convite Enviado - FINDB">
+                <h1>
+                    Convite para chamada de vídeo enviado
+                </h1>
+                <p>
+                    O seu convite para "{{video_chamada.destinatario.nome}}" foi enviado com sucesso! Enviamos para ela um e-mail com o link da reunião
+                </p>
+                <p>
+                    <strong> Data: </strong> {{video_chamada.data}}
+                </p>
+                {% if video_chamada.descricao %}
+                    <p>
+                        <strong> Mensagem: </strong> {{video_chamada.descricao}}
+                    </p>
+                {% else %}
+                    <p>
+                        <strong> Nenhuma mensagem foi enviada! </strong>
+                    </p>
+                {% endif %}
+                <p>
+                    Peça para a pessoa que foi convidada entrar no e-mail e 
+                    clicar no link. Se não achar, peça para ela verificar a caixa de spam na caixa de spam.
+                </p>
+                <a href="{% url 'perfil' video_chamada.destinatario.slug %}">
+                    Ver o perfil de {{video_chamada.destinatario.nome}}
+                </a>
+                <a href="{% url 'home' %}">
+                    Voltar
+                </a>
+            </div>
+        </div>
+    </main>
+
+{% endblock %}

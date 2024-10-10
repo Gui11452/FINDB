@@ -1,0 +1,38 @@
+<div id="navegacao">
+	{% if page_obj.has_previous %}
+		<a href="?p=1" class="naveg">
+			<p> &laquo; </p>
+		</a>
+	{% endif %}
+
+	{% if page_obj.has_previous %}
+		<a href="?p={{page_obj.previous_page_number}}" class="naveg">
+			<p> &lsaquo; </p>
+		</a>
+	{% endif %}
+
+	{% for pagina in page_obj.paginator.page_range %}
+		{% if pagina == page_obj.number %}
+			<a href="?p={{pagina}}" class="naveg naveg-atual">
+				<p> {{ pagina }} </p>
+			</a>
+		{% elif pagina > page_obj.number|add:"-3" and pagina < page_obj.number|add:"3" %}
+			<a href="?p={{pagina}}" class="naveg">
+				<p> {{ pagina }} </p>
+			</a>
+		{% endif %}
+	{% endfor %}
+
+	{% if page_obj.has_next %}
+		<a href="?p={{page_obj.next_page_number}}" class="naveg">
+			<p> &rsaquo; </p>
+		</a>
+	{% endif %}
+
+	{% if page_obj.has_next %}
+		<a href="?p={{page_obj.paginator.num_pages}}" class="naveg">
+			<p> &raquo; </p>
+		</a>
+	{% endif %}
+
+</div>

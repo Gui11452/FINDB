@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block estilos %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/convite_chamada_video_enviado.css' %}">
+{% endblock %}
+{% block titulo %}
+    A sua conta foi cancelada - FINDB
+{% endblock %}
+
+{% block container %} 
+
+    <main class="container">
+        <div>
+            <div class="convite">
+                <img src="{% static 'images/logo.png' %}" alt="Convite Enviado - FINDB">
+                <h1>
+                    A sua conta foi cancelada
+                </h1>
+                <p>
+                    Entendemos que suas necessidades podem mudar, mas se houver algo que possamos fazer para melhorar sua experiência conosco, estamos abertos a ouvir e ajustar nossos serviços para atender suas expectativas.
+                </p>
+
+                <p>
+                    Se você reconsiderar, estaremos aqui para recebê-lo de volta com os braços abertos. Caso contrário, agradecemos pelo tempo que passou conosco e desejamos tudo de bom em seus futuros relacionamentos.
+                </p>
+            </div>
+        </div>
+    </main>
+
+{% endblock %}

@@ -1,0 +1,164 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" 
+    integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/fontawesome.min.css" integrity="sha512-cHxvm20nkjOUySu7jdwiUxgGy11vuVPE9YeK89geLMLMMEOcKFyS2i+8wo0FOwyQO/bL8Bvq1KMsqK4bbOsPnA==" 
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/brands.min.css" integrity="sha512-L+sMmtHht2t5phORf0xXFdTC0rSlML1XcraLTrABli/0MMMylsJi3XA23ReVQkZ7jLkOEIMicWGItyK4CAt2Xw==" 
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/solid.min.css" integrity="sha512-bdTSJB23zykBjGDvyuZUrLhHD0Rfre0jxTd0/jpTbV7sZL8DCth/88aHX0bq2RV8HK3zx5Qj6r2rRU/Otsjk+g==" 
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdn.positus.global/production/resources/robbu/whatsapp-button/whatsapp-button.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/recuperar_senha.css' %}">
+    <link rel="icon" href="{% static 'images/favicon.jpeg' %}">
+    <title> FINDB - Login </title>
+    <style>
+        #google_translate_element{
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 1000000000;
+        }
+    </style>
+</head>
+<body>
+    <!-- Google Translate -->
+    <div id="google_translate_element"></div> 
+
+    <main class="container">
+        <div>
+            <div class="titulo">
+                <h1>
+                    Construindo Relacionamentos saudáveis
+                </h1>
+            </div>
+            <div class="container-loginregistro">
+                <div class="loginregistro">
+                    <a href="{% url 'home' %}">
+                        <img src="{% static 'images/logo_animado.gif' %}" alt="FINDB">
+                        <!-- <img src="{% static 'images/logo.png' %}" alt="FINDB - Login"> -->
+                    </a>
+                    <h2>
+                        <i class="fa-solid fa-user"></i>
+                        Trocar a Senha de: {{usuario}}
+                    </h2>
+                    <small>
+                        A senha tem que ter no mínimo 5 caracteres!
+                    </small>
+                    <small>
+                        As senhas precisam ser iguais!
+                    </small>
+
+                    <form action="{% url 'recuperacao_senha' codigo %}" method="POST" id="form" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {% include 'parciais/_messages.html' %}
+
+                        <label for="senha1">Senha:</label>
+                        <input type="password" name="senha1" id="senha1" required>
+                        <small class="senha1-errors"></small>
+
+                        <label for="senha2">Repetir senha:</label>
+                        <input type="password" name="senha2" id="senha2" required>
+                        <small class="senha2-errors"></small>
+
+                        <div class="g-recaptcha" data-sitekey="{{RECAPTCHA_FRONT}}"></div>
+
+                        <input type="submit" id="submit" value="Trocar Senha">
+                        <span class="loader"></span>
+                    </form>
+                </div>
+            </div>
+            <div class="container-bandeiras">
+                <div>
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/albania.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/alderney.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/alemanha.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/andorra.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/austria.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/belgica.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/bielorrussia.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/bosniaherzegovina.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/bulgaria.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/chipre.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/croacia.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/dinamarca.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/escocia.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/eslovaquia.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/eslovenia.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/espanha.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/estonia.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/finlandia.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/franca.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/gra-bretanha.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/grecia.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/guernsey.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/holanda.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/hungria.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/ilhasaland.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/ilhasfaroe.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/inglaterra.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/irlanda.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/irlandadonorte.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/islandia.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/italia.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/iugoslavia.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/letonia.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/liechtenstein.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/lituania.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/luxemburgo.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/macedonia.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/malta.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/moldavia.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/monaco.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/montenegro.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/noruega.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/paisdegales.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/polonia.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/portugal.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/repcheca.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/romenia.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/russia.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/sanmarino.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/servia.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/suecia.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/suica.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/ucrania.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/vaticano.jpg">
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
+    <script src="{% static 'js/loginregistro.js' %}"></script>
+    <script>
+        const loader = document.querySelector('.loader');
+        const botaoSubmit = document.querySelector('#submit');
+
+        document.addEventListener('submit', e => {
+            loader.style.display = 'inline-block';
+            botaoSubmit.style.display = 'none';
+        });
+    </script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <!-- Google Translate -->
+    <script type="text/javascript">
+    function googleTranslateElementInit() {
+        new google.translate.TranslateElement(
+            {pageLanguage: 'en'},
+            'google_translate_element'
+        );
+    } 
+    </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>

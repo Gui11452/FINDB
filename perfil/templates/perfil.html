@@ -1,0 +1,513 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load filters %}
+{% load filters %}
+{% block estilos %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/perfil.css' %}">
+{% endblock %}
+{% block titulo %}
+    {{perfil.nome}} - Perfil - FINDB
+{% endblock %}
+
+{% block container %} 
+
+    <main class="container">
+        <div>
+            {% if not meu_perfil %}
+                <h1>
+                    INDICAÇÕES DOS NOSSOS CUPIDOS
+                </h1>
+            {% else %}
+                <h1>
+                    Dashboard - Meu perfil
+                </h1>
+            {% endif %}
+            <div class="area-perfil">
+                <div class="perfil">
+                    <div class="perfil-cabecalho">
+                        <div>
+                            {% if perfil.foto %}
+                                <a href="{{perfil.foto.url}}">
+                                    <img src="{{perfil.foto.url}}" alt="{{indicacao.nome}} - FINDB">
+                                </a>
+                            {% else %}
+                                <img src="{% static 'images/foto_user.png' %}" alt="{{perfil.nome}} - Perfil - FINDB">
+                            {% endif %}
+                            <h1>
+                                {{perfil.nome}}
+                            </h1>
+                        </div>
+
+                        <div class="gerenciamento-assinatura">
+                            <!-- Gerenciamento Pedido - Início -->
+                            {% if meu_perfil and pedido %}
+                            <h2>
+                                Sua assinatura
+                            </h2>
+                            <p>
+                                <strong>
+                                    Plano atual:
+                                </strong>
+                                {{pedido.plano.nome|format_plan}}
+                            </p>
+                            <p>
+                                <strong>
+                                    Status da assinatura:
+                                </strong>
+                                {{pedido.status_pedido|format_name_plan}}
+                            </p>
+                            <p class="plano-ativo">
+                                <strong>
+                                    1 evento grátis
+                                </strong>
+                                {% if pedido.plano.nome == 'doze_meses' and pedido.evento_gratis == 'sim' and pedido.qtd_eventos_gratis == 1 %}
+                                    <img style="max-width: 2rem;" src="{% static 'images/ok.png' %}" alt="FINDB">
+                                {% else %}
+                                    <img style="max-width: 2rem;" src="{% static 'images/block.png' %}" alt="FINDB">
+                                {% endif %}
+                            </p>
+                            <p class="plano-ativo">
+                                <strong>
+                                    Plano ativo?
+                                </strong>
+                                {% if pedido.plano_ativo %}
+                                    <img style="max-width: 2rem;" src="{% static 'images/ok.png' %}" alt="FINDB">
+                                {% else %}
+                                    <img style="max-width: 2rem;" src="{% static 'images/block.png' %}" alt="FINDB">
+                                {% endif %}
+                            </p>
+                            <p>
+                                <strong>
+                                    Preço:
+                                </strong>
+                                € {{pedido.preco_pedido}}
+                            </p>
+                            
+                            {% if pedido.plano_ativo %}
+                                <p>
+                                    <strong>
+                                        Data do próximo pagamento:
+                                    </strong>
+                                    {{pedido.current_period_end|format_timestamp}}
+                                </p>
+
+                                {% if pedido.plano.nome != 'doze_meses' %}
+                                    <a href="{% url 'planos' %}" class="trocar-plano">
+                                        Trocar de plano
+                                    </a>
+                                {% endif %}
+                            {% endif %}
+                            <!-- {% if pedido.status_pedido == 'approved' or pedido.status_pedido == 'paused' %}
+                                <a href="" class="gerenciamento-plano">
+                                    Gerenciamento da sua assinatura
+                                </a>
+                            {% endif %} -->
+                        {% endif %}
+                        <!-- Gerenciamento Pedido - Fim -->
+                        </div>
+
+                        {% if not meu_perfil %}
+                            <div class="botoes-perfil">
+
+                                <a href="{% url 'convidar_evento' perfil.slug %}" class="convidar-evento">
+                                    <i class="fa-solid fa-location-dot"></i>
+                                    Convidar para evento
+                                </a>
+
+                                <form action="{% url 'send_notification_comunication' %}" method="POST">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="slug_destinatario" value="{{perfil.slug}}">
+                                    <input type="hidden" name="tipo" value="video">
+                                    <button type="submit" class="convidar-video-instantaneo">
+                                        <i class="fa-solid fa-video"></i>
+                                        Chamada de vídeo
+                                    </button>
+                                </form>
+
+                                <form action="{% url 'send_notification_comunication' %}" method="POST">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="slug_destinatario" value="{{perfil.slug}}">
+                                    <input type="hidden" name="tipo" value="audio">
+                                    <button type="submit" class="convidar-audio">
+                                        <i class="fa-solid fa-phone"></i>
+                                        Chamada de áudio
+                                    </button>
+                                </form>
+
+                                {% if perfil.interesse != 'Eventos' and perfil.interesse != 'Terapias diversas' and perfil.interesse != 'Profissionais em relacionamento' %}
+                                    <a href="" class="convidar-video">
+                                        <i class="fa-solid fa-calendar-days"></i>
+                                        Convidar para reunião
+                                    </a>
+                                {% endif %}
+                                
+                                {% if not bloqueador_perfil %}
+                                    <a href="{% url 'bloquear_usuario' perfil.slug %}" class="btn-bloquear">
+                                        Bloquear usuário
+                                    </a>
+                                {% else %}
+                                    <a href="{% url 'desbloquear_usuario' perfil.slug %}" class="btn-desbloquear">
+                                        Desbloquear usuário
+                                    </a>
+                                {% endif %}
+                            </div>
+                        {% else %}
+                            <div class="botoes-perfil">
+                                <!-- Gerenciamento Pedido - Início -->
+                                {% if pedido.status_pedido == 'approved' and pedido.plano_ativo %}
+                                    <a href="{% url 'chamadas_video' %}" id="ver-chamadas-video">
+                                        <i class="fa-solid fa-video"></i>
+                                        Minhas Chamadas de Vídeo
+                                    </a>
+                                    <a href="{% url 'meus_eventos' %}" id="btn-meus-eventos">
+                                        <i class="fa-regular fa-calendar-days"></i>
+                                        Meus Eventos
+                                    </a>
+                                {% elif pedido.status_pedido == 'pending' or pedido.status_pedido == 'cancel' or pedido.status_pedido == 'rejected' %}
+                                    <h3 style="color: red;">
+                                        Você tem uma assinatura, mas não está ativa
+                                    </h3>
+                                    <p>
+                                        <strong>
+                                            Status da assinatura:
+                                        </strong>
+                                        {{pedido.status_pedido|format_name_plan}}
+                                    </p>
+                                    <a href="{% url 'planos' %}" class="contratar-plano">
+                                        <i class="fa-solid fa-credit-card"></i>
+                                        Contratar assinatura
+                                    </a>                                    
+                                {% else %}
+                                    <h3 style="color: red;">
+                                        Você não tem nenhuma assinatura ativa
+                                    </h3>
+                                    <a href="{% url 'planos' %}" class="contratar-plano">
+                                        <i class="fa-solid fa-credit-card"></i>
+                                        Contratar assinatura
+                                    </a>
+                                {% endif %}
+                                <!-- Gerenciamento Pedido - Fim -->
+                                <a href="{% url 'alterar_dados' %}" class="alterar-dados">
+                                    <i class="fa-solid fa-user-pen"></i>
+                                    Alterar Dados
+                                </a>
+                                <a id="btn-add-album">
+                                    <i class="fa-solid fa-camera"></i>
+                                    Gerenciar álbum
+                                </a>
+
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    {% if perfil.interesse != 'Não quero relacionamentos' %}
+                        <div class="box-chamada-video">
+                            <div class="box-convidar-video">
+                                <h2>
+                                    Vídeo chamada
+                                </h2>
+                                <i class="fa-solid fa-xmark"></i>
+                                <div class="box-info">
+                                    {% if perfil.foto %}
+                                        <img src="{{perfil.foto.url}}" alt="{{perfil.nome}} - FINDB">
+                                    {% else %}
+                                        <img src="{% static 'images/foto_user.png' %}" alt="{{perfil.nome}} - FINDB">
+                                    {% endif %}
+                                    <h3>
+                                        {{perfil.nome}}
+                                    </h3>
+                                </div>
+                                <form action="{% url 'convite_chamada_video' %}" class="form-box-convidar-video" method="POST">
+                                    {% csrf_token %}
+                                    <label for="hora">
+                                        Escolha uma data e horário:
+                                    </label>
+                                    <input type="hidden" name="slug_destinatario" value="{{perfil.slug}}">
+                                    <input type="datetime-local" name="hora" id="hora" min="{{data_formatada_amanha}}" required>
+                                    {% if cupidos %}
+                                        <select name="slug_cupido">
+                                            <option disabled selected>Se desejar, selecione um cupido para participar</option>
+                                            {% for cupido in cupidos %}
+                                                <option value="{{cupido.slug}}">{{cupido.nome}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    {% else %}
+                                        <strong>
+                                            Sem cupidos disponíveis
+                                        </strong>
+                                    {% endif %}
+                                    <textarea name="mensagem" id="mensagem" rows="5" cols="3"
+                                    placeholder="Digite sua mensagem aqui... Máximo de 2000 caracteres" maxlength="2000"></textarea>
+                                    <span class="loader-box-convidar-video"></span>
+                                    <input type="submit" class="submit-form-box-convidar-video" value="Enviar convite">
+                                </form>
+                            </div>
+                        </div>
+                    {% endif %}
+                    
+                    {% include 'parciais/_messages.html' %}
+
+                    <h2>
+                        Álbum de fotos ({{qtd_fotos}})
+                    </h2>
+                    
+                    <div id="album">
+                        <div>
+                            {% if album.foto1 %}
+                                <div>
+                                    <img src="{{album.foto1.url}}" alt="Álbum - FINDB">
+                                    <a href="{{album.foto1.url}}">
+                                        Ver foto 1
+                                    </a>
+                                </div>
+                            {% endif %}
+
+                            {% if album.foto2 %}
+                                <div>
+                                    <img src="{{album.foto2.url}}" alt="Álbum - FINDB">
+                                    <a href="{{album.foto2.url}}">
+                                        Ver foto 2
+                                    </a>
+                                </div>
+                            {% endif %}
+
+                            {% if album.foto3 %}
+                                <div>
+                                    <img src="{{album.foto3.url}}" alt="Álbum - FINDB">
+                                    <a href="{{album.foto3.url}}">
+                                        Ver foto 3
+                                    </a>
+                                </div>
+                            {% endif %}
+
+                            {% if album.foto4 %}
+                                <div>
+                                    <img src="{{album.foto4.url}}" alt="Álbum - FINDB">
+                                    <a href="{{album.foto4.url}}">
+                                        Ver foto 4
+                                    </a>
+                                </div>
+                            {% endif %}
+
+                            {% if album.foto5 %}
+                                <div>
+                                    <img src="{{album.foto5.url}}" alt="Álbum - FINDB">
+                                    <a href="{{album.foto5.url}}">
+                                        Ver foto 5
+                                    </a>
+                                </div>
+                            {% endif %}
+                            
+                        </div>
+                        <form action="{% url 'perfil' perfil.slug %}" id="form-album" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <h3>
+                                Adicione ou remova fotos
+                            </h3>
+                            {% if perfil.foto %}
+                                <label>
+                                    Trocar foto de perfil: 
+                                    <input type="file" name="foto-perfil" accept="image/*">
+                                </label>
+                            {% else %}
+                                <label>
+                                    Adicionar foto de perfil: 
+                                    <input type="file" name="foto-perfil" accept="image/*">
+                                </label>
+                            <!--<label>
+                                    Remover a foto de perfil: 
+                                    <input type="checkbox" name="remover" value="foto-perfil">
+                                </label> -->
+                            {% endif %}
+
+                            {% if not album.foto1 %}
+                                <label>
+                                    Foto 1: 
+                                    <input type="file" name="foto1" accept="image/*">
+                                </label>
+                            {% else %}
+                                <label>
+                                    Remover a foto 1: 
+                                    <input type="checkbox" name="remover" value="foto1">
+                                </label>
+                            {% endif %}
+
+                            {% if not album.foto2 %}
+                                <label>
+                                    Foto 2: 
+                                    <input type="file" name="foto2" accept="image/*">
+                                </label>
+                            {% else %}
+                                <label>
+                                    Remover a foto 2: 
+                                    <input type="checkbox" name="remover" value="foto2">
+                                </label>
+                            {% endif %}
+
+                            {% if not album.foto3 %}
+                                <label>
+                                    Foto 3: 
+                                    <input type="file" name="foto3" accept="image/*">
+                                </label>
+                            {% else %}
+                                <label>
+                                    Remover a foto 3: 
+                                    <input type="checkbox" name="remover" value="foto3">
+                                </label>
+                            {% endif %}
+
+                            {% if not album.foto4 %}
+                                <label>
+                                    Foto 4: 
+                                    <input type="file" name="foto4" accept="image/*">
+                                </label>
+                            {% else %}
+                                <label>
+                                    Remover a foto 4: 
+                                    <input type="checkbox" name="remover" value="foto4">
+                                </label>
+                            {% endif %}
+
+                            {% if not album.foto5 %}
+                                <label>
+                                    Foto 5: 
+                                    <input type="file" name="foto5" accept="image/*">
+                                </label>
+                            {% else %}
+                                <label>
+                                    Remover a foto 5: 
+                                    <input type="checkbox" name="remover" value="foto5">
+                                </label>
+                            {% endif %}
+                            
+                            <div class="loader"></div>
+                            <input type="submit" id="gerenciar-album" value="Gerenciar">
+                            
+                        </form>
+                    </div>
+
+                    <h2>
+                        Sobre mim
+                    </h2>
+                    <p class="descricao">
+                        {{perfil.descricao}}
+                    </p>
+                    <h2>
+                        Informações pessoais
+                    </h2>
+                    <div class="informacoes">
+                        <p>
+                            <strong>Gênero</strong>: {{perfil.genero}}
+                        </p>
+                        <p>
+                            <strong>Idade</strong>: {{perfil.idade}}
+                        </p>
+                        <p>
+                            <strong>País</strong>: {{perfil.pais}}
+                        </p>
+                        <p>
+                            <strong>Nacionalidade</strong>: {{perfil.nacionalidade}}
+                        </p>
+                        <p>
+                            <strong>Região</strong>: {{perfil.regiao}}
+                        </p>
+                        <p>
+                            <strong>Interesses</strong>: {{perfil.interesse}}
+                        </p>
+                        <p>
+                            <strong>Orientação Sexual</strong>: {{perfil.orientacao_sexual}}
+                        </p>
+                        <p>
+                            <strong>Profissão</strong>: {{perfil.profissao}}
+                        </p>
+                        <p>
+                            <strong>Estado Civil</strong>: {{perfil.estado_civil}}
+                        </p>
+                        <p>
+                            <strong>Signo</strong>: {{perfil.signo}}
+                        </p>
+                        <p>
+                            <strong>Etnia</strong>: {{perfil.etnia}}
+                        </p>
+                        <p>
+                            <strong>Cabelos</strong>: {{perfil.cor_cabelo}}
+                        </p>
+                        <p>
+                            <strong>Olhos</strong>: {{perfil.cor_olhos}}
+                        </p>
+                        <p>
+                            <strong>Altura</strong>: {{perfil.altura}}
+                        </p>
+                        <p>
+                            <strong>Corpo</strong>: {{perfil.tipo_corpo}}
+                        </p>
+                        <p>
+                            <strong>Fuma</strong>: {{perfil.fuma}}
+                        </p>
+                        <p>
+                            <strong>Bebe</strong>: {{perfil.bebe}}
+                        </p>
+                        {% if perfil.cupido %}
+                            <p>
+                                <strong>Cupido</strong>: 
+                                {{perfil.cupido.nome}} 
+                                <a href="{% url 'cupido' perfil.cupido.slug %}">
+                                    <i class="fa-solid fa-right-to-bracket"></i>
+                                </a>
+                            </p>
+                        {% endif %}
+                    </div>
+
+                    {% if meu_perfil %}
+                        <a href="{% url 'perfil_cancelamento_assinatura' %}" class="btn-bad">
+                            Excluir perfil de forma definitiva
+                        </a>
+                    {% endif %}
+                    
+                </div>
+                <div class="indicacoes">
+                    {% if perfis %}
+                        <h2>
+                            Conheça também
+                        </h2>
+                        <div>
+                            {% for indicacao in perfis %}
+                                <a href="{% url 'perfil' indicacao.slug %}" class="indicacao">
+                                    {% if indicacao.foto %}
+                                        <img src="{{indicacao.foto.url}}" alt="{{indicacao.nome}} - FINDB">
+                                    {% else %}
+                                        <img src="{% static 'images/foto_user.png' %}" alt="{{indicacao.nome}} - FINDB">
+                                    {% endif %}
+                                    <div>
+                                        <p>
+                                            {{indicacao.nome}} - {{indicacao.idade}}
+                                            {% if indicacao|is_user_online %}
+                                                <span class="ntf-status ntf-online"></span>
+                                            {% else %}
+                                                <span class="ntf-status ntf-offline"></span>
+                                            {% endif %}
+                                        </p>
+                                        <small>
+                                            {{indicacao.pais}}
+                                        </small>
+                                        <small>
+                                            {{indicacao.interesse}}
+                                        </small>
+                                    </div>
+                                </a>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <h2>
+                            Nenhum usuário cadastrado
+                        </h2>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </main>
+
+{% endblock %}
+{% block scripts %}
+    <script src="{% static 'js/perfil.js' %}"></script>
+{% endblock %}

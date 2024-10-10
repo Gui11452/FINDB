@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block estilos %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/send_notification_call.css' %}">
+{% endblock %}
+{% block titulo %}
+    FINDB - Convite Chamada de Vídeo/Áudio
+{% endblock %}
+
+{% block container %} 
+
+    <main class="container">
+        <div>
+            <section class="box">
+                <a href="{{link_destinatario}}">
+                    <img src="{{destinatario_foto}}" alt="{{destinatario_nome}} - FINDB">
+                </a>
+
+                <h2>
+                    {{destinatario_nome}}
+                </h2>
+        
+                <h3>
+                    <i class="fa-solid fa-phone"></i>
+                    <span>Ligando {{tipo}}...</span>
+                </h3>
+        
+                <audio controls loop>
+                    <source src="/static/audio_chamada.mp3/" type="audio/mpeg">
+                    Seu navegador não suporta o elemento de áudio.
+                </audio>
+            </section>
+        </div>
+    </main>
+
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        const intervalo1 = setInterval(() => {
+            const wsProtocol = window.location.protocol;
+            const wsHost = window.location.host;
+            fetch(`${wsProtocol}//${wsHost}/comunication/get_comunication/{{id}}/`)
+            .then(response => response.json())
+            .then(data => {
+                //console.log(data);
+                const h3 = document.querySelector('.box h3');
+                if(data.error && data.error == 'block'){
+                    h3.innerHTML = data.mensagem;
+                    h3.style.color = 'red';
+                }
+                else if(!data.error && data.confirmacao == 'Rejeitado'){
+                    h3.innerHTML = 'A sua ligação foi rejeitada.';
+                    h3.style.color = 'red';
+                }
+                else if(!data.error && data.confirmacao == 'Expirado'){
+                    h3.innerHTML = 'A sua ligação expirou.';
+                    h3.style.color = 'red';
+                }
+                else if(!data.error && data.confirmacao == 'Confirmado'){
+                    h3.innerHTML = 'A sua ligação foi confirmada.';
+                    h3.style.color = 'green';
+                    setTimeout(() => {
+                        window.location.href = `${wsProtocol}//${wsHost}/comunication/comunication_call/${data.roomID}/`
+                    }, 1000);
+                    clearInterval(intervalo1);
+                }
+                else if(data.error){
+                    
+                }
+                
+            })
+        }, 1000);
+    </script>
+{% endblock %}

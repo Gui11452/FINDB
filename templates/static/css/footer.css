@@ -1,0 +1,62 @@
+/* Rodapé - Início */
+
+.rodape{
+    width: 100%;
+    padding: 4rem 0;
+    background: #f7f7f7;
+}
+
+.rodape>div{
+    width: 90%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 5rem;
+}
+
+.coluna-rodape{
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.coluna-rodape img{
+    max-width: 5rem;
+}
+
+.coluna-rodape a{
+    color: var(--cor-preto);
+    transition: .3s;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.coluna-rodape a img{
+    max-width: 3rem;
+}
+
+.coluna-rodape a:hover{
+    transform: scale(1.05);
+}
+
+.coluna-rodape>div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* Rodapé - Fim */
+
+@media(max-width: 760px){
+    .rodape>div{
+        flex-flow: column nowrap;
+        justify-content: center;
+        align-items: center;
+    }
+}

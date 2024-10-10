@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block estilos %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/convite_chamada_video_enviado.css' %}">
+{% endblock %}
+{% block titulo %}
+    Solicitação exclusão definitiva da sua conta - FINDB
+{% endblock %}
+
+{% block container %} 
+
+    <main class="container">
+        <div>
+            <div class="convite">
+                <img src="{% static 'images/logo.jpeg' %}" alt="Convite Enviado - FINDB">
+                <h1>
+                    Você pediu para excluir definitivamente a sua conta
+                </h1>
+                <p>
+                    Olá, notamos que você solicitou a exclusão definitiva da sua conta em 
+                    nosso site. Antes de finalizar este 
+                    processo, gostaríamos de relembrar alguns dos benefícios exclusivos que você 
+                    estará deixando para trás:
+                </p>
+                
+                <p>
+                    <strong>
+                        1 - Acesso a Terapeutas:
+                    </strong> Nossa equipe de terapeutas especializados está sempre disponível para ajudar você a navegar pelos desafios das relações, promovendo um espaço seguro para crescimento pessoal.
+                </p>
+
+                <p>
+                    <strong>
+                        2 - Convites para Chamadas de Vídeo:
+                    </strong> A possibilidade de convidar alguém para uma chamada de vídeo é uma excelente forma de conhecer pessoas novas e aprofundar conexões, tudo isso no conforto e segurança de sua casa.
+                </p>
+
+                <p>
+                    <strong>
+                        3 - Eventos Exclusivos:
+                    </strong> Nossos eventos são uma oportunidade única de conhecer pessoas que compartilham interesses semelhantes em um ambiente amigável e acolhedor.
+                </p>
+
+                <p>
+                    Entendemos que suas necessidades podem mudar, mas se houver algo que possamos fazer para melhorar sua experiência conosco, estamos abertos a ouvir e ajustar nossos serviços para atender suas expectativas.
+                </p>
+
+                <p>
+                    Se você reconsiderar, estaremos aqui para recebê-lo de volta com os braços abertos. Caso contrário, agradecemos pelo tempo que passou conosco e desejamos tudo de bom em seus futuros relacionamentos.
+                </p>
+
+                <strong>
+                    Para cancelar a sua conta, enviamos um e-mail para você com um link seguro. Caso não consiga achar, veja na caixa de spam
+                </strong>
+
+                <p>
+                    <strong style="color: red;">
+                        OBSERVAÇÃO: essa ação é IRREVERSÍVEL. O seu perfil será excluido e tudo será perdido. Caso você queira entrar no site novamente,
+                        Terá que criar uma nova conta.
+                    </strong>
+                </p>
+
+            </div>
+        </div>
+    </main>
+
+{% endblock %}

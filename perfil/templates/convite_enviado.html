@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block estilos %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/convite_enviado.css' %}">
+{% endblock %}
+{% block titulo %}
+    Convite Enviado - FINDB
+{% endblock %}
+
+{% block container %} 
+
+    <main class="container">
+        <div>
+            <div class="convite">
+                <img src="{% static 'images/logo.jpeg' %}" alt="Convite Enviado - FINDB">
+                <h1>
+                    Convite Enviado
+                </h1>
+                <p>
+                    O seu convite foi enviado com sucesso!
+                </p>
+                <p>
+                    Peça para a pessoa que foi convidada entrar no e-mail e 
+                    clicar no link. Se não achar, peça para ela verificar a caixa de spam na caixa de spam.
+                </p>
+                <a href="{% url 'home' %}">
+                    Voltar
+                </a>
+            </div>
+        </div>
+    </main>
+
+{% endblock %}

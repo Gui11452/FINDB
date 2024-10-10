@@ -1,0 +1,462 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load filters %}
+{% block estilos %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/filtro.css' %}">
+{% endblock %}
+{% block titulo %}
+    Filtro Pessoas - FINDB
+{% endblock %}
+
+{% block container %} 
+
+    <main class="container">
+        <div>
+            <h1>
+                Ache a pessoa ideal para você.
+            </h1>
+            <form method="GET" action="{% url 'filtro' %}" id="form-filtro" class="pesquisa">
+                <div>
+                    <input type="text" name="pesquisa" id="pesquisa" placeholder="Buscar" value="{{request.GET.pesquisa}}">
+                    <label for="pesquisa">
+                        <button type="submit">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                    </label>
+                </div>
+                <a href="" id="botao-filtro">
+                    <i class="fa-solid fa-filter"></i>
+                    Filtros
+                </a>
+                <a href="{% url 'filtro' %}">
+                    <i class="fa-solid fa-circle-xmark"></i>
+                    Limpar filtros
+                </a>
+                <div id="request-get" style="display: none;" request_get="{{request.GET}}"></div>
+                <div id="form-inputs">
+                    <div>
+                        <h2>
+                            Filtros
+                            <i class="fa-solid fa-xmark"></i>
+                        </h2>
+                        <div>
+                            <!-- <select name="genero" id="genero">
+                                <option disabled selected>Selecione o gênero</option>
+                                <option value="Masculino">Masculino</option>
+                                <option value="Feminino">Feminino</option>
+                                <option value="Outros">Outros</option>
+                            </select> -->
+
+                            <select name="idade" id="idade">
+                                <option disabled selected>Selecione a idade</option>
+                                <option value="18">18</option>
+                                <option value="19">19</option>
+                                <option value="20">20</option>
+                                <option value="21">21</option>
+                                <option value="22">22</option>
+                                <option value="23">23</option>
+                                <option value="24">24</option>
+                                <option value="25">25</option>
+                                <option value="26">26</option>
+                                <option value="27">27</option>
+                                <option value="28">28</option>
+                                <option value="29">29</option>
+                                <option value="30">30</option>
+                                <option value="31">31</option>
+                                <option value="32">32</option>
+                                <option value="33">33</option>
+                                <option value="34">34</option>
+                                <option value="35">35</option>
+                                <option value="36">36</option>
+                                <option value="37">37</option>
+                                <option value="38">38</option>
+                                <option value="39">39</option>
+                                <option value="40">40</option>
+                                <option value="41">41</option>
+                                <option value="42">42</option>
+                                <option value="43">43</option>
+                                <option value="44">44</option>
+                                <option value="45">45</option>
+                                <option value="46">46</option>
+                                <option value="47">47</option>
+                                <option value="48">48</option>
+                                <option value="49">49</option>
+                                <option value="50">50</option>
+                                <option value="51">51</option>
+                                <option value="52">52</option>
+                                <option value="53">53</option>
+                                <option value="54">54</option>
+                                <option value="55">55</option>
+                                <option value="56">56</option>
+                                <option value="57">57</option>
+                                <option value="58">58</option>
+                                <option value="59">59</option>
+                                <option value="60">60</option>
+                                <option value="61">61</option>
+                                <option value="62">62</option>
+                                <option value="63">63</option>
+                                <option value="64">64</option>
+                                <option value="65">65</option>
+                                <option value="66">66</option>
+                                <option value="67">67</option>
+                                <option value="68">68</option>
+                                <option value="69">69</option>
+                                <option value="70">70</option>
+                                <option value="71">71</option>
+                                <option value="72">72</option>
+                                <option value="73">73</option>
+                                <option value="74">74</option>
+                                <option value="75">75</option>
+                                <option value="76">76</option>
+                                <option value="77">77</option>
+                                <option value="78">78</option>
+                                <option value="79">79</option>
+                                <option value="80">80</option>
+                                <option value="81">81</option>
+                                <option value="82">82</option>
+                                <option value="83">83</option>
+                                <option value="84">84</option>
+                                <option value="85">85</option>
+                                <option value="86">86</option>
+                                <option value="87">87</option>
+                                <option value="88">88</option>
+                                <option value="89">89</option>
+                                <option value="90">90</option>
+                                <option value="91">91</option>
+                                <option value="92">92</option>
+                                <option value="93">93</option>
+                                <option value="94">94</option>
+                                <option value="95">95</option>
+                                <option value="96">96</option>
+                                <option value="97">97</option>
+                                <option value="98">98</option>
+                                <option value="99">99</option>
+                                <option value="100">100</option>
+                            </select>
+                            
+                            <select name="pais" id="pais">
+                                <option disabled selected>Selecione o país</option>
+                                <option value="Alemanha">Alemanha</option>
+                                <option value="Áustria">Áustria</option>
+                                <option value="Bélgica">Bélgica</option>
+                                <option value="Bulgária">Bulgária</option>
+                                <option value="Chipre">Chipre</option>
+                                <option value="Croácia">Croácia</option>
+                                <option value="Dinamarca">Dinamarca</option>
+                                <option value="Eslováquia">Eslováquia</option>
+                                <option value="Eslovênia">Eslovênia</option>
+                                <option value="Espanha">Espanha</option>
+                                <option value="Estônia">Estônia</option>
+                                <option value="Finlândia">Finlândia</option>
+                                <option value="França">França</option>
+                                <option value="Grécia">Grécia</option>
+                                <option value="Hungria">Hungria</option>
+                                <option value="Irlanda">Irlanda</option>
+                                <option value="Itália">Itália</option>
+                                <option value="Letônia">Letônia</option>
+                                <option value="Lituânia">Lituânia</option>
+                                <option value="Luxemburgo">Luxemburgo</option>
+                                <option value="Malta">Malta</option>
+                                <option value="Países Baixos">Países Baixos</option>
+                                <option value="Polônia">Polônia</option>
+                                <option value="Portugal">Portugal</option>
+                                <option value="Romênia">Romênia</option>
+                                <option value="Suécia">Suécia</option>
+                                <option value="Albânia">Albânia</option>
+                                <option value="Andorra">Andorra</option>
+                                <option value="Armênia">Armênia</option>
+                                <option value="Azerbaijão">Azerbaijão</option>
+                                <option value="Bielorrússia">Bielorrússia</option>
+                                <option value="Bósnia e Herzegovina">Bósnia e Herzegovina</option>
+                                <option value="Cazaquistão">Cazaquistão</option>
+                                <option value="Geórgia">Geórgia</option>
+                                <option value="Islândia">Islândia</option>
+                                <option value="Kosovo">Kosovo</option>
+                                <option value="Liechtenstein">Liechtenstein</option>
+                                <option value="Moldávia">Moldávia</option>
+                                <option value="Mônaco">Mônaco</option>
+                                <option value="Montenegro">Montenegro</option>
+                                <option value="Macedônia do Norte">Macedônia do Norte</option>
+                                <option value="Noruega">Noruega</option>
+                                <option value="Rússia">Rússia</option>
+                                <option value="San Marino">San Marino</option>
+                                <option value="Sérvia">Sérvia</option>
+                                <option value="Suíça">Suíça</option>
+                                <option value="Turquia">Turquia</option>
+                                <option value="Ucrânia">Ucrânia</option>
+                                <option value="Reino Unido">Reino Unido</option>
+                                <option value="Vaticano">Vaticano</option>
+                            </select>
+
+                            <!-- <select name="orientacao_sexual" id="orientacao_sexual">
+                                <option disabled selected>Selecione a orientação sexual</option>
+                                <option value="Heterossexual">Heterossexual</option>
+                                <option value="Homossexual">Homossexual</option>
+                                <option value="Bissexual">Bissexual</option>
+                                <option value="Pansexual">Pansexual</option>
+                                <option value="Assexual">Assexual</option>
+                                <option value="Outros">Outros</option>
+                            </select> -->
+
+                            <select name="estado_civil" id="estado_civil">
+                                <option disabled selected>Selecione o estado civil</option>
+                                <option value="Solteiro">Solteiro</option>
+                                <option value="Casado">Casado</option>
+                                <option value="Divorciado">Divorciado</option>
+                                <option value="Viúvo">Viúvo</option>
+                                <option value="Separado">Separado</option>
+                                <option value="Relacionamento Sério">Relacionamento Sério</option>
+                            </select>
+
+                            <select name="signo" id="signo">
+                                <option disabled selected>Selecione o signo</option>
+                                <option value="Áries">Áries</option>
+                                <option value="Touro">Touro</option>
+                                <option value="Gêmeos">Gêmeos</option>
+                                <option value="Câncer">Câncer</option>
+                                <option value="Leão">Leão</option>
+                                <option value="Virgem">Virgem</option>
+                                <option value="Libra">Libra</option>
+                                <option value="Escorpião">Escorpião</option>
+                                <option value="Sagitário">Sagitário</option>
+                                <option value="Capricórnio">Capricórnio</option>
+                                <option value="Aquário">Aquário</option>
+                                <option value="Peixes">Peixes</option>
+                            </select>
+
+                            <select name="etnia" id="etnia">
+                                <option disabled selected>Selecione a etnia</option>
+                                <option value="Branco">Branco</option>
+                                <option value="Negro">Negro</option>
+                                <option value="Pardo">Pardo</option>
+                                <option value="Indígena">Indígena</option>
+                                <option value="Amarelo">Amarelo</option>
+                                <option value="Outros">Outros</option>
+                            </select>
+
+                            <select name="cor_cabelo" id="cor_cabelo">
+                                <option disabled selected>Selecione a cor do cabelo</option>
+                                <option value="Preto">Preto</option>
+                                <option value="Castanho">Castanho</option>
+                                <option value="Loiro">Loiro</option>
+                                <option value="Ruivo">Ruivo</option>
+                                <option value="Grisalho">Grisalho</option>
+                                <option value="Outros">Outros</option>
+                            </select>
+
+                            <select name="cor_olhos" id="cor_olhos">
+                                <option disabled selected>Selecione a cor dos olhos</option>
+                                <option value="Azul">Azul</option>
+                                <option value="Verde">Verde</option>
+                                <option value="Castanho">Castanho</option>
+                                <option value="Preto">Preto</option>
+                                <option value="Outro">Outro</option>
+                            </select>
+
+                            <select name="altura" id="altura">
+                                <option disabled selected>Selecione a altura</option>
+                                <option value="Abaixo de 1,50m">Abaixo de 1,50m</option>
+                                <option value="1,50m - 1,60m">1,50m - 1,60m</option>
+                                <option value="1,60m - 1,70m">1,60m - 1,70m</option>
+                                <option value="1,70m - 1,80m">1,70m - 1,80m</option>
+                                <option value="1,80m - 1,90m">1,80m - 1,90m</option>
+                                <option value="Mais de 1,90m">Mais de 1,90m</option>
+                            </select>
+
+                            <select name="tipo_corpo" id="tipo_corpo">
+                                <option disabled selected>Selecione o tipo do corpo</option>
+                                <option value="Magro">Magro</option>
+                                <option value="Normal">Normal</option>
+                                <option value="Atlético">Atlético</option>
+                                <option value="Gordo">Gordo</option>
+                                <option value="Musculoso">Musculoso</option>
+                                <option value="Outros">Outros</option>
+                            </select>
+
+                            <select name="fuma" id="fuma">
+                                <option disabled selected>Fuma?</option>
+                                <option value="Sim">Sim</option>
+                                <option value="Não">Não</option>
+                            </select>
+
+                            <select name="bebe" id="bebe">
+                                <option disabled selected>Bebe?</option>
+                                <option value="Sim">Sim</option>
+                                <option value="Não">Não</option>
+                            </select>
+                        </div>
+                        <span class="loader"></span>
+                        <input type="submit" id="filtrar" value="Filtrar">
+                    </div>
+                </div>
+            </form>
+            {% if page_obj %}
+                <h2>
+                    {{qtd}}
+                </h2>
+                {% if request.GET.p %}
+                    <h3>
+                        Página atual: {{request.GET.p}} de {{page_obj.paginator.num_pages}}
+                    </h3>
+                {% else %}
+                    <h3>
+                        Página atual: 1 de {{page_obj.paginator.num_pages}}
+                    </h3>
+                {% endif %}
+                <div class="filtros">
+                    {% for perfil in page_obj %}
+                        
+                        <div class="filtro">
+                            <a href="{% url 'perfil' perfil.slug %}">
+                                {% if perfil.foto %}
+                                    <img src="{{perfil.foto.url}}" alt="{{perfil.nome}} - FINDB">
+                                {% else %}
+                                    <img src="{% static 'images/foto_user.png' %}" alt="{{perfil.nome}} - FINDB">
+                                {% endif %}
+                            </a>
+                            <div>
+                                <h3>
+                                    {{perfil.nome}} - {{perfil.idade}}
+                                    {% if perfil|is_user_online %}
+                                        <span class="ntf-status ntf-online"></span>
+                                    {% else %}
+                                        <span class="ntf-status ntf-offline"></span>
+                                    {% endif %}
+                                </h3>
+                                <h4>
+                                    {{perfil.pais}}
+                                </h4>
+                                <p>
+                                    {{perfil.genero}}
+                                </p>
+
+                                <button>
+                                    <i class="fa-regular fa-comment"></i>
+                                    Convidar
+                                </button>
+    
+                                <section class="dropdown">
+                                    <strong>
+                                        {{perfil.nome}}
+                                    </strong>
+                                    <!--{% if perfil.interesse != 'Networking e Negocios' and perfil.interesse != 'Terapias diversas' and perfil.interesse != 'Profissionais em relacionamento' %}
+                                        <a href="{% url 'convidar_evento' perfil.slug %}" class="convidar-evento">
+                                            <i class="fa-regular fa-calendar-days"></i>
+                                            Convidar para evento
+                                        </a>
+                                    {% endif %}-->
+                                    <a href="{% url 'convidar_evento' perfil.slug %}" class="convidar-evento">
+                                        <i class="fa-solid fa-location-dot"></i>
+                                        Convidar para evento
+                                    </a>
+    
+                                    <form action="{% url 'send_notification_comunication' %}" method="POST">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="slug_destinatario" value="{{perfil.slug}}">
+                                        <input type="hidden" name="tipo" value="video">
+                                        <button type="submit" class="convidar-video-instantaneo">
+                                            <i class="fa-solid fa-video"></i>
+                                            Chamada de vídeo
+                                        </button>
+                                    </form>
+    
+                                    <form action="{% url 'send_notification_comunication' %}" method="POST">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="slug_destinatario" value="{{perfil.slug}}">
+                                        <input type="hidden" name="tipo" value="audio">
+                                        <button type="submit" class="convidar-audio">
+                                            <i class="fa-solid fa-phone"></i>
+                                            Chamada de áudio
+                                        </button>
+                                    </form>
+    
+                                    {% if perfil.interesse != 'Eventos' and perfil.interesse != 'Terapias diversas' and perfil.interesse != 'Profissionais em relacionamento' %}
+                                        <a href="" class="convidar-video">
+                                            <i class="fa-solid fa-calendar-days"></i>
+                                            Convidar para reunião
+                                        </a>
+                                    {% endif %}
+                                </section>
+
+                                <strong style="margin: 1rem 0;">
+                                    {{perfil.interesse}}
+                                </strong>
+                                {% if perfil.cupido %}
+                                    <div>
+                                        {% if perfil.cupido.foto %}
+                                            <a href="{% url 'cupido' perfil.cupido.slug %}">
+                                                <img src="{{perfil.cupido.foto.url}}" alt="{{perfil.cupido.nome}}">
+                                            </a>
+                                        {% else %}
+                                            <a href="{% url 'cupido' perfil.cupido.slug %}">
+                                                <img src="{% static 'images/foto_user.png' %}" alt="{{perfil.cupido.nome}}">
+                                            </a>
+                                        {% endif %}
+                                        <p>
+                                            {{perfil.cupido.nome}}
+                                        </p>
+                                    </div>
+                                {% endif %}
+
+                                {% if perfil.interesse != 'Eventos' and perfil.interesse != 'Terapias diversas' and perfil.interesse != 'Profissionais em relacionamento' %}
+                                    <div class="box-chamada-video">
+                                        <div class="box-convidar-video">
+                                            <h2>
+                                                Vídeo chamada
+                                            </h2>
+                                            <i class="fa-solid fa-xmark"></i>
+                                            <div class="box-info">
+                                                {% if perfil.foto %}
+                                                    <img src="{{perfil.foto.url}}" alt="{{perfil.nome}} - FINDB">
+                                                {% else %}
+                                                    <img src="{% static 'images/foto_user.png' %}" alt="{{perfil.nome}} - FINDB">
+                                                {% endif %}
+                                                <h3>
+                                                    {{perfil.nome}}
+                                                </h3>
+                                            </div>
+                                            <form action="{% url 'convite_chamada_video' %}" class="form-box-convidar-video" method="POST">
+                                                {% csrf_token %}
+                                                <label for="hora">
+                                                    Escolha uma data e horário:
+                                                </label>
+                                                <input type="hidden" name="slug_destinatario" value="{{perfil.slug}}">
+                                                <input type="datetime-local" name="hora" id="hora" min="{{data_formatada_amanha}}" required>
+                                                {% if cupidos %}
+                                                    <select name="slug_cupido">
+                                                        <option disabled selected>Se desejar, selecione um cupido para participar</option>
+                                                        {% for cupido in cupidos %}
+                                                            <option value="{{cupido.slug}}">{{cupido.nome}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                {% else %}
+                                                    <strong>
+                                                        Sem cupidos disponíveis
+                                                    </strong>
+                                                {% endif %}
+                                                <textarea name="mensagem" id="mensagem" rows="5" cols="3"
+                                                placeholder="Digite sua mensagem aqui... Máximo de 2000 caracteres" maxlength="2000"></textarea>
+                                                <span class="loader-box-convidar-video"></span>
+                                                <input type="submit" class="submit-form-box-convidar-video" value="Enviar convite">
+                                            </form>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                    {% endfor %}
+                </div>
+                {% include 'parciais/_pagination.html' %}
+            {% else %}
+                <h2>
+                    {{qtd}}
+                </h2>
+            {% endif %}
+        </div>
+    </main>
+
+{% endblock %}
+{% block scripts %}
+    <script src="{% static 'js/filtro.js' %}"></script>
+{% endblock %}

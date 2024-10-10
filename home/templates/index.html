@@ -1,0 +1,255 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load filters %}
+{% block estilos %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}">
+{% endblock %}
+{% block titulo %}
+    FINDB - Página Principal
+{% endblock %}
+
+{% block container %} 
+
+    <main class="container">
+        <div>
+            <form method="GET" action="{% url 'home_filtro' %}" class="pesquisa">
+                <div>
+                    <input type="text" name="pesquisa" id="pesquisa" placeholder="Buscar">
+                    <label for="pesquisa">
+                        <button type="submit">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                    </label>
+                </div>
+                <a href="{% url 'filtro' %}" id="botao-filtro">
+                    <i class="fa-solid fa-filter"></i>
+                    Ver mais filtros
+                </a>
+            </form>
+            <div class="cupido">
+                <h2>
+                    OLÁ, CUPIDO! CONVIDE SEUS AMIGOS PARA ENTRAR NO WEBSITE
+                </h2>
+                {% include 'parciais/_messages.html' %}
+                <form action="{% url 'convidar' %}" id="form-convidar-amigos" method="POST">
+                    {% csrf_token %}
+                    <input type="email" name="email" required placeholder="Digite o e-mail da pessoa que você deseja indicar">
+                    <span class="loader"></span>
+                    <input type="submit" id="submit" value="Enviar">
+                </form>
+            </div>
+            <h2>
+                PRÓXIMOS EVENTOS
+            </h2>
+            {% if carrossel and c > 0 %}
+                {% if c > 1 %}
+                    <div class="carrosel">
+                        <div class="rolagem">
+                            {% if carrossel.banner1 %}
+                                <input type="radio" name="rolagem-carrosel" id="banner1">
+                                <label for="banner1">
+                                    <i class="fa-solid fa-minus azul"></i>
+                                </label>
+                            {% endif %}
+                            {% if carrossel.banner2 %}
+                                <input type="radio" name="rolagem-carrosel" id="banner2">
+                                <label for="banner2">
+                                    <i class="fa-solid fa-minus"></i>
+                                </label>
+                            {% endif %}
+                            {% if carrossel.banner3 %}
+                                <input type="radio" name="rolagem-carrosel" id="banner3">
+                                <label for="banner3">
+                                    <i class="fa-solid fa-minus"></i>
+                                </label>
+                            {% endif %}
+                        </div>
+                        <div class="carrosel-interno">
+                            <div>
+                                {% if carrossel.banner1 and carrossel.banner2 and not carrossel.banner3 %}
+                                    <img src="{{carrossel.banner1.url}}" alt="Eventos - FINDB - Página Principal" link="{{carrossel.link1}}">
+                                    <img src="{{carrossel.banner2.url}}" alt="Eventos - FINDB - Página Principal" link="{{carrossel.link2}}">
+                                {% endif %}
+
+                                {% if carrossel.banner2 and carrossel.banner3 and not carrossel.banner1 %}
+                                    <img src="{{carrossel.banner2.url}}" alt="Eventos - FINDB - Página Principal" link="{{carrossel.link2}}">
+                                    <img src="{{carrossel.banner3.url}}" alt="Eventos - FINDB - Página Principal" link="{{carrossel.link3}}">
+                                {% endif %}
+
+                                {% if carrossel.banner1 and carrossel.banner3 and not carrossel.banner2 %}
+                                    <img src="{{carrossel.banner1.url}}" alt="Eventos - FINDB - Página Principal" link="{{carrossel.link1}}">
+                                    <img src="{{carrossel.banner3.url}}" alt="Eventos - FINDB - Página Principal" link="{{carrossel.link3}}">
+                                {% endif %}
+
+                                {% if carrossel.banner1 and carrossel.banner2 and carrossel.banner3 %}
+                                    <img src="{{carrossel.banner1.url}}" alt="Eventos - FINDB - Página Principal" link="{{carrossel.link1}}">
+                                    <img src="{{carrossel.banner2.url}}" alt="Eventos - FINDB - Página Principal" link="{{carrossel.link2}}">
+                                    <img src="{{carrossel.banner3.url}}" alt="Eventos - FINDB - Página Principal" link="{{carrossel.link3}}">
+                                {% endif %}
+
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                <div class="carrosel">
+                    <div class="carrosel-interno">
+                        <div>
+                            {% if carrossel.banner1 %}
+                                <img src="{{carrossel.banner1.url}}" alt="Eventos - FINDB - Página Principal" link="{{carrossel.link1}}">>
+                            {% elif carrossel.banner2 %}
+                                <img src="{{carrossel.banner2.url}}" alt="Eventos - FINDB - Página Principal" link="{{carrossel.link2}}">>
+                            {% elif carrossel.banner3 %}
+                                <img src="{{carrossel.banner3.url}}" alt="Eventos - FINDB - Página Principal" link="{{carrossel.link3}}">>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            {% endif %}
+            <div class="pessoas">
+                <h2>
+                    CONHEÇA PESSOAS NOVAS
+                </h2>
+                {% include 'parciais/_messages.html' %}
+                <div>
+                    {% for perfil in perfis %}
+                        <div class="pessoa">
+                            <a href="{% url 'perfil' perfil.slug %}">
+                                {% if perfil.foto %}
+                                    <img src="{{perfil.foto.url}}" alt="{{perfil.nome}} - FINDB">
+                                {% else %}
+                                    <img src="{% static 'images/foto_user.png' %}" alt="{{perfil.nome}} - FINDB">
+                                {% endif %}
+                            </a>
+                            <h3>
+                                {{perfil.nome}} - {{perfil.idade}} 
+                                {% if perfil|is_user_online %}
+                                    <span class="ntf-status ntf-online"></span>
+                                {% else %}
+                                    <span class="ntf-status ntf-offline"></span>
+                                {% endif %}
+                            </h3>
+                            <h4>
+                                {{perfil.pais}}
+                            </h4>
+                            <p>
+                                {{perfil.genero}}
+                            </p>
+
+                            <button>
+                                <i class="fa-regular fa-comment"></i>
+                                Convidar
+                            </button>
+
+                            <section class="dropdown">
+                                <strong>
+                                    {{perfil.nome}}
+                                </strong>
+                                <!--{% if perfil.interesse != 'Networking e Negocios' and perfil.interesse != 'Terapias diversas' and perfil.interesse != 'Profissionais em relacionamento' %}
+                                    <a href="{% url 'convidar_evento' perfil.slug %}" class="convidar-evento">
+                                        <i class="fa-regular fa-calendar-days"></i>
+                                        Convidar para evento
+                                    </a>
+                                {% endif %}-->
+                                <a href="{% url 'convidar_evento' perfil.slug %}" class="convidar-evento">
+                                    <i class="fa-solid fa-location-dot"></i>
+                                    Convidar para evento
+                                </a>
+
+                                <form action="{% url 'send_notification_comunication' %}" method="POST">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="slug_destinatario" value="{{perfil.slug}}">
+                                    <input type="hidden" name="tipo" value="video">
+                                    <button type="submit" class="convidar-video-instantaneo">
+                                        <i class="fa-solid fa-video"></i>
+                                        Chamada de vídeo
+                                    </button>
+                                </form>
+
+                                <form action="{% url 'send_notification_comunication' %}" method="POST">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="slug_destinatario" value="{{perfil.slug}}">
+                                    <input type="hidden" name="tipo" value="audio">
+                                    <button type="submit" class="convidar-audio">
+                                        <i class="fa-solid fa-phone"></i>
+                                        Chamada de áudio
+                                    </button>
+                                </form>
+
+                                {% if perfil.interesse != 'Eventos' and perfil.interesse != 'Terapias diversas' and perfil.interesse != 'Profissionais em relacionamento' %}
+                                    <a href="" class="convidar-video">
+                                        <i class="fa-solid fa-calendar-days"></i>
+                                        Convidar para reunião
+                                    </a>
+                                {% endif %}
+                            </section>
+
+                            <strong style="margin: 1rem 0;">
+                                {{perfil.interesse}}
+                            </strong>
+
+                            {% if perfil.interesse != 'Eventos' and perfil.interesse != 'Terapias diversas' and perfil.interesse != 'Profissionais em relacionamento' %}
+                                <div>
+                                    <div class="box-convidar-video">
+                                        <h2>
+                                            Reunião
+                                        </h2>
+                                        <i class="fa-solid fa-xmark"></i>
+                                        <div class="box-info">
+                                            {% if perfil.foto %}
+                                                <img src="{{perfil.foto.url}}" alt="{{perfil.nome}} - FINDB">
+                                            {% else %}
+                                                <img src="{% static 'images/foto_user.png' %}" alt="{{perfil.nome}} - FINDB">
+                                            {% endif %}
+                                            <h3>
+                                                {{perfil.nome}}
+                                            </h3>
+                                        </div>
+                                        <form action="{% url 'convite_chamada_video' %}" class="form-box-convidar-video" method="POST">
+                                            {% csrf_token %}
+                                            <label for="hora">
+                                                Escolha uma data e horário:
+                                            </label>
+                                            <input type="hidden" name="slug_destinatario" value="{{perfil.slug}}">
+                                            <input type="datetime-local" name="hora" id="hora" min="{{data_formatada_amanha}}" required>
+                                            {% if cupidos %}
+                                                <select name="slug_cupido">
+                                                    <option disabled selected>Se desejar, selecione um cupido para participar</option>
+                                                    {% for cupido in cupidos %}
+                                                        <option value="{{cupido.slug}}">{{cupido.nome}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            {% else %}
+                                                <strong>
+                                                    Sem cupidos disponíveis
+                                                </strong>
+                                            {% endif %}
+                                            <textarea name="mensagem" id="mensagem" rows="5" cols="3"
+                                            placeholder="Digite sua mensagem aqui... Máximo de 2000 caracteres" maxlength="2000"></textarea>
+                                            <span class="loader-box-convidar-video"></span>
+                                            <input type="submit" class="submit-form-box-convidar-video" value="Enviar convite">
+                                        </form>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% empty %}
+                        <h2>
+                            Nenhum perfil foi cadastrado ainda.
+                        </h2>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="bug">
+        sadasd
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/index.js' %}"></script>
+    <script src="{% static 'js/carrossel.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,208 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load filters_eventos %}
+{% block estilos %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/presenciais.css' %}">
+{% endblock %}
+{% block titulo %}
+    Eventos Presenciais - FINDB
+{% endblock %}
+
+{% block container %} 
+
+    <main class="container">
+        <div>
+            {% if page_obj %}
+                <h1>
+                    Eventos Presenciais ({{qtd}})
+                </h1>
+                <div class="eventos">
+                    {% for evento in page_obj %}
+                        <div class="evento">
+                            <div>
+                                {% if evento.foto %}
+                                    <a href="{% url 'evento' evento.slug %}">  
+                                        <img src="{{evento.foto.url}}" alt="{{evento.nome}} - FINDB">               
+                                    </a>
+                                {% else %}
+                                    <a href="{% url 'evento' evento.slug %}">  
+                                        <img src="{% static 'images/evento_sem_foto_presencial.jpg' %}" alt="{{evento.nome}} - FINDB">            
+                                    </a>
+                                {% endif %}
+                                <div>
+                                    <h3>
+                                        {{evento.nome}}
+                                    </h3>
+                                    <div class="botoes">
+                                        <a href="{% url 'evento' evento.slug %}">
+                                            <i class="fa-regular fa-calendar-days"></i>
+                                            Ver evento
+                                        </a>
+                                        {% if evento.link_localizacao %}
+                                            <a href="{{evento.link_localizacao}}" target="_blank">
+                                                <i class="fa-solid fa-location-dot"></i>
+                                                Localização do Evento
+                                            </a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <p>
+                                <strong>
+                                    Categoria:
+                                </strong>
+                                {% if evento.categoria %}
+                                    {{evento.categoria.nome|title}}
+                                {% else %}
+                                    Não tem
+                                {% endif %}
+                            </p>
+                            {% if evento.pagamento != 'Gratuito' %}
+                                {% if evento.divisao_genero == 'metade' %}
+                                    <p>
+                                        <strong> Valor Homem: </strong>
+                                        € {{evento.valor_homem}}
+                                    </p>
+                                    <p>
+                                        <strong>Valor Mulher:</strong>
+                                        € {{evento.valor_mulher}}
+                                    </p>
+                                {% elif evento.divisao_genero == 'nenhum' %}
+                                    {% if evento.valor == 0 %}
+                                        <p>
+                                            <strong>Valor Homem:</strong>
+                                            € {{evento.valor_homem}}
+                                        </p>
+                                        <p>
+                                            <strong>Valor Mulher:</strong>
+                                            € {{evento.valor_mulher}}
+                                        </p>
+                                    {% else %}
+                                        <p>
+                                            <strong>Valor:</strong>
+                                            € {{evento.valor}}
+                                        </p>
+                                    {% endif %}
+                                {% else %}
+                                    <p>
+                                        <strong>Valor:</strong>
+                                        € {{evento.valor}}
+                                    </p>
+                                {% endif %}
+                            {% else %}
+                                <p>
+                                    <strong>
+                                        Valor:
+                                    </strong>
+                                    Gratuito
+                                </p>
+                            {% endif %}
+
+                            {% if not evento.presenca_crianca or evento.divisao_genero == 'metade' %}
+                                <section>
+                                    <img src="{% static 'images/block.png' %}" alt="FINDB - Evento - {{evento.nome}}">
+                                    Esse evento NÃO permite crianças.
+                                </section>
+                            {% else %}
+                                <section>
+                                    <img src="{% static 'images/ok.png' %}" alt="FINDB - Evento - {{evento.nome}}">
+                                    Esse evento permite crianças. As que tiverem até {{evento.idade_crianca|format_ano}}, NÃO pagam.
+                                </section>
+                                <p>
+                                    <strong>
+                                        Valor Criança (mais de {{evento.idade_crianca|format_ano}}):
+                                    </strong>
+                                    € {{evento.valor_crianca}}
+                                </p>
+                            {% endif %}
+
+                            <p>
+                                <strong>
+                                    Data e Horário de Início:
+                                </strong>
+                                {{evento.data}}
+                            </p>
+                            <p>
+                                <strong>
+                                    Data e Horário de Término:
+                                </strong>
+                                {{evento.data_termino}}
+                            </p>
+                            {% if evento.localizacao %}
+                                <p>
+                                    <strong>
+                                        Localização do Evento:
+                                    </strong>
+                                    {{evento.localizacao}}
+                                </p>
+                            {% endif %}
+
+                            <p>
+                                <strong>
+                                    Gênero:
+                                </strong>
+                                {% if evento.divisao_genero == 'mulher' or evento.divisao_genero == 'homem' %}
+                                    {{evento.divisao_genero|title}}
+                                {% elif evento.divisao_genero == 'metade' %}
+                                    50% homem e 50% mulher
+                                {% else %}
+                                    Todos
+                                {% endif %}
+                            </p>
+
+                            <p>
+                                <strong>
+                                    Quantidade máxima de pessoas:
+                                </strong>
+                                {% if evento.divisao_genero == 'mulher' %}
+                                    {{evento.maximo_participantes|format_mulher_participantes_evento}}
+                                {% elif evento.divisao_genero == 'metade' %}
+                                    {{evento.maximo_participantes|format_metade_participantes_evento}}
+                                {% elif evento.divisao_genero == 'homem' %}
+                                    {{evento.maximo_participantes|format_homem_participantes_evento}}
+                                {% else %}
+                                    {{evento.maximo_participantes|format_pessoa_participantes_evento}}
+                                {% endif %}
+                            </p>
+                            <p>
+                                <strong>
+                                    Quantidade de vagas restantes:
+                                </strong>
+                                {% if evento.divisao_genero != 'metade' and evento.qtd_participantes > 0 %}
+                                    {{evento.qtd_participantes|format_pessoa_participantes_evento}}
+                                {% elif evento.divisao_genero == 'metade' %}
+                                    {% if evento.qtd_participantes_homens > 0 %}
+                                        {{evento.qtd_participantes_homens|format_homem_participantes_evento}}
+                                    {% else %}
+                                        <span style="color: red">
+                                            ESGOTADO HOMENS
+                                        </span>
+                                    {% endif %}
+                                    e
+                                    {% if evento.qtd_participantes_mulheres > 0 %}
+                                        {{evento.qtd_participantes_mulheres|format_mulher_participantes_evento}}
+                                    {% else %}
+                                        <span style="color: red">
+                                            ESGOTADO MULHERES
+                                        </span>
+                                    {% endif %}
+                                {% else %}
+                                    <strong style="color: red">
+                                        ESGOTADO
+                                    </strong>
+                                {% endif %}
+                            </p>
+                        </div>
+                    {% endfor %}
+                </div>
+                {% include 'parciais/_pagination_evento.html' %}
+            {% else %}
+                <h1>
+                    Eventos Presenciais (0)
+                </h1>
+            {% endif %}
+        </div>
+    </main>
+
+{% endblock %}
+

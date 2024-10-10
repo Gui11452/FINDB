@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block estilos %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/convidar_evento.css' %}">
+{% endblock %}
+{% block titulo %}
+    Convidar  - FINDB
+{% endblock %}
+
+{% block container %} 
+
+    <main class="container">
+        <div>
+            {% if page_obj %}
+                <h1>
+                    Convide "{{destinatario.nome}}" para um evento <br>
+                    {{qtd}} eventos ativos
+                </h1>
+                {% include 'parciais/_messages.html' %}
+                {% for evento in page_obj %}
+                    
+                    <form action="{% url 'convidar_evento' destinatario.slug %}" method="POST" class="evento">
+                        <input type="hidden" name="slug_evento" value="{{evento.slug}}">
+                        {% csrf_token %}
+                        <div>
+                            {% if evento.foto %}
+                                <a href="{% url 'evento' evento.slug %}"> 
+                                    <img src="{{evento.foto.url}}" alt="{{evento.nome}} - FINDB">               
+                                </a>
+                            {% elif evento.tipo == 'Presencial' %}
+                                <a href="{% url 'evento' evento.slug %}"> 
+                                    <img src="{% static 'images/evento_sem_foto_presencial.jpg' %}" alt="{{evento.nome}} - FINDB">
+                                </a>
+                            {% else %}
+                                <a href="{% url 'evento' evento.slug %}"> 
+                                    <img src="{% static 'images/evento_sem_foto_online.jpg' %}" alt="{{evento.nome}} - FINDB">
+                                </a>
+                            {% endif %}
+                            <div>
+                                <h3>
+                                    {{evento.nome}}
+                                </h3>
+                                <div class="botoes">
+                                    <a href="{% url 'evento' evento.slug %}">
+                                        <i class="fa-regular fa-calendar-days"></i>
+                                        Ver evento
+                                    </a>
+                                    {% if evento.tipo == 'Presencial' and evento.link_localizacao %}
+                                        <a href="{{evento.link_localizacao}}" target="_blank">
+                                            <i class="fa-solid fa-location-dot"></i>
+                                            Localização
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <p>
+                            <strong>
+                                Valor:
+                            </strong>
+                            {% if evento.pagamento != 'Gratuito' %}
+                                € {{evento.valor}}
+                            {% else %}
+                                Gratuito
+                            {% endif %}
+                        </p>
+                        <p>
+                            <strong>
+                                Data e Horário:
+                            </strong>
+                            {{evento.data}}
+                        </p>
+                        {% if evento.tipo == 'Online' and evento.link_reunião %}
+                            <p>
+                                <strong>
+                                    Link reunião:
+                                </strong>
+                                {{evento.link_reunião}}
+                            </p>
+                        {% endif %}
+                        {% if evento.tipo == 'Presencial' and evento.localizacao %}
+                            <p>
+                                <strong>
+                                    Localização:
+                                </strong>
+                                {{evento.localizacao}}
+                            </p>
+                        {% endif %}
+                        <p>
+                            <strong>
+                                Quantidade de vagas restantes:
+                            </strong>
+                            {% if evento.qtd_participantes >= 1 %}
+                                {{evento.qtd_participantes}}
+                            {% else %}
+                                <span style="color: red; font-weight: bold;">
+                                    ESGOTADO
+                                </span>
+                            {% endif %}
+                        </p>
+                        <p>
+                            <strong>
+                                Descrição:
+                            </strong>
+                            {{evento.descricao}}
+                        </p>
+
+                        {% if evento.qtd_participantes >= 1 %}
+                            <label for="descricao" class="p-descricao">
+                                Mensagem: 0/2000 caracteres escritos
+                            </label>
+                            <textarea name="descricao" class="descricao" id="descricao" maxlength="2000"
+                            cols="6" rows="5" placeholder="Qual o motivo do convite?"></textarea>
+
+                            <button type="submit" class="btn-evento">
+                                <i class="fa-solid fa-envelope"></i>
+                                Convidar
+                            </button>
+                            <span class="loader-evento"></span>
+                        {% endif %}
+                    </form>
+
+                {% endfor %}
+            {% else %}
+                <h1>
+                    Não existe eventos ativos.
+                </h1>
+            {% endif %}
+            {% include 'parciais/_pagination_evento.html' %}
+        </div>
+    </main>
+
+{% endblock %}
+{% block scripts %}
+    <script src="{% static 'js/convidar_evento.js' %}"></script>
+{% endblock %}
+

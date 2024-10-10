@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block estilos %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/success_reject.css' %}">
+{% endblock %}
+{% block titulo %}
+    Pedido Rejeitado - FINDB
+{% endblock %}
+
+{% block container %} 
+
+    <main class="container">
+        <div>
+            <div class="status">
+                <img src="{% static 'images/logo.jpeg' %}" alt="Pedido Rejeitado - FINDB">
+                <h1>
+                    O seu pedido foi 
+                    <span style="color: red;">
+                        rejeitado
+                    </span> 
+                </h1>
+                <p>
+                    Ocorreu algum erro com o seu pagamento, por favor, tente de novo
+                </p>
+                
+                <a href="{% url 'meu_perfil' %}">
+                    Tentar de novo
+                </a>
+            </div>
+        </div>
+    </main>
+
+{% endblock %}

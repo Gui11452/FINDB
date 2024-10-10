@@ -1,0 +1,198 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block estilos %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/profissional.css' %}">
+{% endblock %}
+{% block titulo %}
+    Profissional - FINDB
+{% endblock %}
+
+{% block container %} 
+
+    <main class="container">
+        <div>
+            {% if profissional %}      
+                <section class="profissional">
+                    <div class="coluna1">
+                        {% if profissional.video %}
+                            <video controls>
+                                <source src="https://m42api.m-21.tech/{{profissional.video}}" type="video/mp4">
+                                Seu navegador não suporta a tag de vídeo.
+                            </video>
+                        {% endif %}
+                        <div class="metricas">
+                            <div>
+                                <img src="{% static 'images/verificacao.png' %}" alt="Profissionais em Relacionamentos - Métricas">
+                                <h2>
+                                    Terapeuta <br>
+                                    Comprovado
+                                </h2>
+                            </div>
+                            <div>
+                                <img src="{% static 'images/grafico.png' %}" alt="Profissionais em Relacionamentos - Métricas">
+                                <h2>
+                                    {{profissional.sessions}} 
+                                    {% if profissional.sessions == 1 %}
+                                        Sessão na <br>
+                                        Plataforma
+                                    {% else %}
+                                        Sessões na <br>
+                                        Plataforma
+                                    {% endif %}
+                                </h2>
+                            </div>
+                            <div>
+                                <img src="{% static 'images/like.png' %}" alt="Profissionais em Relacionamentos - Métricas">
+                                <h2>
+                                    {{profissional.rating}} 
+                                    {% if profissional.sessions == 1 %}
+                                        Avaliação na <br>
+                                        Plataforma
+                                    {% else %}
+                                        Avaliações na <br>
+                                        Plataforma
+                                    {% endif %}
+                                </h2>
+                            </div>
+                        </div>
+                        <div class="informacoes-gerais">
+                            <h3>
+                                Informações Gerais
+                            </h3>
+                            <div>
+                                <div>
+                                    <p>
+                                        <i class="fa-solid fa-comment-dots"></i>
+                                        Idioma da sessão: 
+                                        <strong>
+                                            {% for lingua in profissional.languages %}
+                                                <span>
+                                                    {{lingua}}
+                                                </span>
+                                            {% endfor %}
+                                        </strong>
+                                    </p>
+                                    <p>
+                                        <i class="fa-solid fa-medal"></i>
+                                        Tipos de especialidade:
+                                        <strong>
+                                            {% for tipo in profissional.specialistTypes %}
+                                                <span>
+                                                    {{tipo}}
+                                                </span>
+                                            {% endfor %}
+                                        </strong>
+                                    </p>
+    
+                                    <p>
+                                        <i class="fa-solid fa-comment-dots"></i>
+                                        Áreas de experiência: 
+                                        <strong>
+                                            {% for area in profissional.areasOfExpertise %}
+                                                <span>
+                                                    {{area}}
+                                                </span>
+                                            {% endfor %}
+                                        </strong>
+                                    </p> 
+
+                                    <p>
+                                        <i class="fa-solid fa-comment-dots"></i>
+                                        Rede social: 
+                                        <strong>
+                                            {{profissional.socialMedia}}
+                                        </strong>
+                                    </p>  
+                                </div>
+                                
+                                <div>
+                                    <p>
+                                        <i class="fa-solid fa-clipboard"></i>
+                                        Qualificação:
+                                        <strong>
+                                            {{profissional.qualification}}
+                                        </strong>
+                                    </p>
+                                    <p>
+                                        <i class="fa-solid fa-pen"></i>
+                                        Experiência:
+                                        <strong>
+                                            {{profissional.experience}}
+                                        </strong>
+                                    </p>
+                                    <p>
+                                        <i class="fa-solid fa-location-dot"></i>
+                                        Endereço:
+                                        <strong>
+                                            {{profissional.address}}
+                                        </strong>
+                                    </p>
+                                    <p>
+                                        <i class="fa-solid fa-phone"></i>
+                                        Contato:
+                                        <strong>
+                                            {{profissional.contact}}
+                                        </strong>
+                                    </p>
+                                    <p>
+                                        <i class="fa-solid fa-comment-dots"></i>
+                                        Qualificação:
+                                        <strong>
+                                            {{profissional.qualification}}
+                                        </strong>
+                                    </p>
+    
+                                    <p>
+                                        <i class="fa-solid fa-envelope"></i>
+                                        E-mail:
+                                        <strong>
+                                            {{profissional.email}}
+                                        </strong>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="descricao">
+                            <h3>
+                                <i class="fa-solid fa-circle-info"></i>
+                                Descrição:
+                            </h3>
+                            <p>
+                                {{profissional.description}}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="coluna2">
+                        {% if profissional.profilePhoto %}
+                            <a href="https://m42api.m-21.tech/{{profissional.profilePhoto}}">  
+                                <img src="https://m42api.m-21.tech/{{profissional.profilePhoto}}" alt="{{profissional.name}} - FINDB">               
+                            </a>
+                        {% else %}
+                            <img src="{% static 'images/foto_user.png' %}" alt="{{profissional.name}} - FINDB">
+                        {% endif %}
+                        <h1>
+                            {{profissional.name}}
+                        </h1>
+                        <h2>
+                            € {{profissional.consultationFee}} / {{profissional.consultationType}}
+                        </h2>
+                        <a href="{{profissional.website}}" class="btn">
+                            Marcar consulta
+                        </a>
+                    </div>
+                </section>
+
+            {% else %}
+                <h1>
+                    Esse profissional não existe.
+                </h1>
+            {% endif %}
+        </div>
+    </main>
+
+{% endblock %}
+{% block scripts %}
+    <script src="{% static 'js/evento.js' %}"></script>
+{% endblock %}
+

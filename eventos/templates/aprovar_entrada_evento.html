@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block estilos %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/success_reject.css' %}">
+{% endblock %}
+{% block titulo %}
+    Página de Verificação de QR Code  - FINDB
+{% endblock %}
+
+{% block container %} 
+
+    <main class="container">
+        <div>
+            <div class="status">
+                <img src="{% static 'images/logo.jpeg' %}" alt="Pedido Aprovado - FINDB">
+                {% if validacao %}
+                    <h1>
+                        Parabéns {{participacao_evento.remetente.nome}} seu qrcode foi 
+                        <span style="color: green;">
+                            aprovado
+                        </span> com sucesso
+                    </h1>
+                    {% if participacao_evento.evento.foto %}
+                        <img src="{{participacao_evento.evento.foto.url}}" alt="{{participacao_evento.evento.nome}} - FINDB">
+                    {% endif %}
+                    <p>
+                        Parabéns, agora você pode desfrutar de todas as 
+                        funcionalidades que o evento "{{participacao_evento.evento.nome}}" oferece 💖
+                    </p>
+                {% else %}
+                    <h1 style="color: red;">
+                        {{mensagem}}
+                    </h1>
+                {% endif %}
+            </div>
+        </div>
+    </main>
+
+{% endblock %}

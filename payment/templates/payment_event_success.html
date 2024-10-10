@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block estilos %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/success_reject.css' %}">
+{% endblock %}
+{% block titulo %}
+    Pagamento feito com sucesso - FINDB
+{% endblock %}
+
+{% block container %} 
+
+    <main class="container">
+        <div>
+            <div class="status">
+                <img src="{% static 'images/logo.jpeg' %}" alt="Pedido Aprovado - FINDB">
+                <h1>
+                    O seu pagamento para o evento foi
+                    <span style="color: green;">
+                        aprovado
+                    </span> com sucesso
+                </h1>
+                <p>
+                    Parabéns, agora você pode aproveitar o evento e todos os benefícios que ele oferece 💖
+                </p>
+                <p>
+                    Já está disponível no seu perfil em: "Meus eventos" o qrcode de confirmação.
+                    <span style="color: red; font-weight: bold;">Guarde ele com muita segurança e não compartilhe 
+                        com ninguém, pois só poderá entrar no evento com ele.</span>
+                </p>
+                <p>
+                    <strong>
+                        Evento presencial:
+                    </strong>
+                    <span style="color: red; font-weight: bold;">
+                        Compareça no local na hora marcada, com o qrcode em mãos
+                        Apenas quando a sua participação for confirmada,
+                        será quando você terá acesso ao seu qrcode exclusivo.
+                    </span>
+                </p>
+                <p>
+                    <strong>
+                        Evento online:
+                    </strong>
+                    <span style="color: red; font-weight: bold;">
+                        Pegue o link da reunião na página "Meus eventos" e também esteja com o qrcode. 
+                        Apenas quando a sua participação for confirmada,
+                        será quando você terá acesso ao link da reunião e o seu qrcode exclusivo.
+                    </span>
+                </p>
+                
+                <a href="{% url 'meus_eventos' %}">
+                    Ver meus eventos
+                </a>
+            </div>
+        </div>
+    </main>
+
+{% endblock %}

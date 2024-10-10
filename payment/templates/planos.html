@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block estilos %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/planos.css' %}">
+{% endblock %}
+{% block titulo %}
+    Planos - FINDB
+{% endblock %}
+
+{% block container %} 
+
+    <main class="container">
+        <div>
+            <h1>
+                Conheça nossos planos
+            </h1>
+            {% include 'parciais/_messages.html' %}
+            <div class="planos">
+                <div class="plano">
+                    <h2>
+                        3 MESES
+                    </h2>
+                    <p>
+                        Chamadas para vídeo
+                    </p>
+                    <p>
+                        Convites para eventos
+                    </p>
+                    <p>
+                        Profissionais de relacionamentos
+                    </p>
+                    <h3>
+                        € 19,70
+                    </h3>
+                   <div>
+                        <!-- if nome_plano and nome_plano != 'tres_meses'
+                            <a href="" class="btn-tres-meses">
+                                Trocar de plano
+                            </a> -->
+                        {% if nome_plano and nome_plano == 'tres_meses' %}
+                            <h3>
+                                Plano atual
+                            </h3>
+                        {% else %}
+                            <a href="{% url 'create_session' 'assinatura' 'tres_meses' %}" class="btn-tres-meses">
+                                Assinar
+                            </a>
+                        {% endif %}
+                        <span class="loader loader-tres-meses"></span>
+                   </div>
+                </div>
+                <div class="plano">
+                    <h2>
+                        1 ANO
+                    </h2>
+                    <p>
+                        Chamadas para vídeo
+                    </p>
+                    <p>
+                        Convites para eventos
+                    </p>
+                    <p>
+                        Ajuda de um cupido
+                    </p>
+                    <p>
+                        Profissionais de relacionamentos
+                    </p>
+                    <p>
+                        Convide amigos
+                    </p>    
+                    <p>
+                        1 evento grátis
+                    </p>
+                    <h3>
+                        € 49,70
+                    </h3>
+                   <div>
+                        {% if nome_plano and nome_plano != 'doze_meses' %}
+                            <a href="{% url 'upgrade_plan' 'doze_meses' %}" class="btn-doze-meses">
+                                Trocar de plano
+                            </a>
+                        {% elif nome_plano and nome_plano == 'doze_meses' %}
+                            <h3>
+                                Plano atual
+                            </h3>
+                        {% else %}
+                            <a href="{% url 'create_session' 'assinatura' 'doze_meses' %}" class="btn-doze-meses">
+                                Assinar
+                            </a>
+                        {% endif %}
+                        <span class="loader loader-doze-meses"></span>
+                   </div>
+                </div>
+                <div class="plano">
+                    <h2>
+                        6 MESES
+                    </h2>
+                    <p>
+                        Chamadas para vídeo
+                    </p>
+                    <p>
+                        Convites para eventos
+                    </p>
+                    <p>
+                        Profissionais de relacionamentos
+                    </p>
+                    <p>
+                        Ajuda de um cupido
+                    </p>
+                    <p>
+                        Convide amigos
+                    </p>
+                    <h3>
+                        € 29,70
+                    </h3>
+                   <div>
+                        {% if nome_plano and nome_plano == 'tres_meses' %}
+                            <a href="{% url 'upgrade_plan' 'seis_meses' %}" class="btn-seis-meses">
+                                Trocar de plano
+                            </a>
+                        {% elif nome_plano and nome_plano == 'seis_meses' %}
+                            <h3>
+                                Plano atual
+                            </h3>
+                        {% else %}
+                            <a href="{% url 'create_session' 'assinatura' 'seis_meses' %}" class="btn-seis-meses">
+                                Assinar
+                            </a>
+                        {% endif %}
+                        <span class="loader loader-seis-meses"></span>
+                   </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+{% endblock %}
+{% block scripts %}
+    <script src="{% static 'js/planos.js' %}"></script>
+{% endblock %}

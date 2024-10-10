@@ -1,0 +1,395 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" 
+    integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/fontawesome.min.css" integrity="sha512-cHxvm20nkjOUySu7jdwiUxgGy11vuVPE9YeK89geLMLMMEOcKFyS2i+8wo0FOwyQO/bL8Bvq1KMsqK4bbOsPnA==" 
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/brands.min.css" integrity="sha512-L+sMmtHht2t5phORf0xXFdTC0rSlML1XcraLTrABli/0MMMylsJi3XA23ReVQkZ7jLkOEIMicWGItyK4CAt2Xw==" 
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/solid.min.css" integrity="sha512-bdTSJB23zykBjGDvyuZUrLhHD0Rfre0jxTd0/jpTbV7sZL8DCth/88aHX0bq2RV8HK3zx5Qj6r2rRU/Otsjk+g==" 
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdn.positus.global/production/resources/robbu/whatsapp-button/whatsapp-button.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/loginregistro.css' %}">
+    <link rel="icon" href="{% static 'images/favicon.jpeg' %}">
+    <title> FINDB - Login </title>
+    <style>
+        #google_translate_element{
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 1000000000;
+        }
+    </style>
+</head>
+<body>
+    <!-- Google Translate -->
+    <div id="google_translate_element"></div> 
+
+    <main class="container">
+        <div>
+            <div class="titulo">
+                <h1>
+                    Construindo Relacionamentos saudáveis
+                </h1>
+            </div>
+            <div class="container-loginregistro">
+                <div class="loginregistro">
+                    <a href="{% url 'home' %}">
+                        <img src="{% static 'images/logo_animado.gif' %}" alt="FINDB">
+                        <!-- <img src="{% static 'images/logo.png' %}" alt="FINDB - Login"> -->
+                    </a>
+                    {% include 'parciais/_messages.html' %}
+                    <div id="request-post" style="display: none;" request_post="{{request.POST}}"></div>
+                    <form action="{% url 'registro' %}" method="POST" id="form" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="primeira_parte">
+                            <div>
+                                <input type="text" name="nome" id="nome" placeholder="Nome e último nome" value="{{request.POST.nome}}">
+                                <select name="genero" id="genero">
+                                    <option disabled selected>Gênero</option>
+                                    <option value="Masculino">Masculino</option>
+                                    <option value="Feminino">Feminino</option>
+                                    <option value="Outros">Outros</option>
+                                </select>
+                            </div>
+                            <small id="error_nome_genero"></small>
+                            
+                            <p>
+                                Data de Aniversário
+                            </p>
+                            <input type="text" id="data" name="aniversario" value="{{request.POST.aniversario}}" placeholder="Aniversário 00/00/0000" onkeypress="$(this).mask('00/00/0000')">
+                            <small id="error_data"></small>
+                            <div>
+                                <input type="text" id="nacionalidade" name="nacionalidade" 
+                                placeholder="Nacionalidade" value="{{request.POST.nacionalidade}}">
+                                <input type="email" id="email" name="email" 
+                                placeholder="E-mail" value="{{request.POST.email}}">
+                            </div>
+                            <small id="error_nacionalidade_email"></small>
+
+                            <input type="password" name="senha1" id="senha1" placeholder="Crie uma senha">
+                            <input type="password" name="senha2" id="senha2" placeholder="Repetir senha">
+                            <small id="error_senhas"></small>
+
+                            <div>
+                                <select name="pais" id="pais">
+                                    <option disabled selected>Selecione o país</option>
+                                    <option value="Alemanha">Alemanha</option>
+                                    <option value="Áustria">Áustria</option>
+                                    <option value="Bélgica">Bélgica</option>
+                                    <option value="Bulgária">Bulgária</option>
+                                    <option value="Chipre">Chipre</option>
+                                    <option value="Croácia">Croácia</option>
+                                    <option value="Dinamarca">Dinamarca</option>
+                                    <option value="Eslováquia">Eslováquia</option>
+                                    <option value="Eslovênia">Eslovênia</option>
+                                    <option value="Espanha">Espanha</option>
+                                    <option value="Estônia">Estônia</option>
+                                    <option value="Finlândia">Finlândia</option>
+                                    <option value="França">França</option>
+                                    <option value="Grécia">Grécia</option>
+                                    <option value="Hungria">Hungria</option>
+                                    <option value="Irlanda">Irlanda</option>
+                                    <option value="Itália">Itália</option>
+                                    <option value="Letônia">Letônia</option>
+                                    <option value="Lituânia">Lituânia</option>
+                                    <option value="Luxemburgo">Luxemburgo</option>
+                                    <option value="Malta">Malta</option>
+                                    <option value="Países Baixos">Países Baixos</option>
+                                    <option value="Polônia">Polônia</option>
+                                    <option value="Portugal">Portugal</option>
+                                    <option value="Romênia">Romênia</option>
+                                    <option value="Suécia">Suécia</option>
+                                    <option value="Albânia">Albânia</option>
+                                    <option value="Andorra">Andorra</option>
+                                    <option value="Armênia">Armênia</option>
+                                    <option value="Azerbaijão">Azerbaijão</option>
+                                    <option value="Bielorrússia">Bielorrússia</option>
+                                    <option value="Bósnia e Herzegovina">Bósnia e Herzegovina</option>
+                                    <option value="Cazaquistão">Cazaquistão</option>
+                                    <option value="Geórgia">Geórgia</option>
+                                    <option value="Islândia">Islândia</option>
+                                    <option value="Kosovo">Kosovo</option>
+                                    <option value="Liechtenstein">Liechtenstein</option>
+                                    <option value="Moldávia">Moldávia</option>
+                                    <option value="Mônaco">Mônaco</option>
+                                    <option value="Montenegro">Montenegro</option>
+                                    <option value="Macedônia do Norte">Macedônia do Norte</option>
+                                    <option value="Noruega">Noruega</option>
+                                    <option value="Rússia">Rússia</option>
+                                    <option value="San Marino">San Marino</option>
+                                    <option value="Sérvia">Sérvia</option>
+                                    <option value="Suíça">Suíça</option>
+                                    <option value="Turquia">Turquia</option>
+                                    <option value="Ucrânia">Ucrânia</option>
+                                    <option value="Reino Unido">Reino Unido</option>
+                                    <option value="Vaticano">Vaticano</option>
+                                </select>
+                                
+                                <input type="text" id="celular" name="celular" 
+                                placeholder="N°/celular/Telemóvel" 
+                                value="{{request.POST.celular}}">
+                                <!-- onkeypress="$(this).mask('(00) 00000-0000')" -->
+                            </div>
+                            <small id="error_pais_celular"></small>
+
+                            <input type="text" id="regiao" name="regiao" 
+                            placeholder="Região" value="{{request.POST.regiao}}">
+                            <small id="error_regiao"></small>
+
+                            <select name="interesses" id="interesses">
+                                <option disabled selected>Interesses</option>
+                                <option value="Relacionamento Sério">Relacionamento Sério</option>
+                                <option value="Encontros">Encontros</option>
+                                <option value="Namoros">Namoros</option>
+                                <option value="Amizades">Amizades</option>
+                                <option value="Networking e Negocios">Networking e Negócios</option>
+                                <option value="Terapias diversas">Terapias diversas</option>
+                                <option value="Profissionais em relacionamento">Profissionais em relacionamento</option>
+                                <option value="Eventos">Eventos</option>
+                            </select>
+                            <small id="error_interesses"></small>
+                              
+                            <div>
+                                <input type="submit" value="Vamos lá!">
+                                <a href="{% url 'login' %}">
+                                    Já tenho uma conta
+                                </a>
+                            </div>
+                        </div>
+                        <div class="segunda_parte">
+                            <div>
+                                <select name="orientacao_sexual" id="orientacao_sexual">
+                                    <option disabled selected>Orientação Sexual</option>
+                                    <option value="Heterossexual">Heterossexual</option>
+                                    <option value="Homossexual">Homossexual</option>
+                                    <option value="Bissexual">Bissexual</option>
+                                    <option value="Pansexual">Pansexual</option>
+                                    <option value="Assexual">Assexual</option>
+                                    <option value="Outros">Outros</option>
+                                </select>
+                                <input type="text" id="profissao" name="profissao" placeholder="Profissão">
+                            </div>
+                            <small id="error_orientacao_sexual_profissao"></small>
+
+                            <div>
+                                <select name="estado_civil" id="estado_civil">
+                                    <option disabled selected>Estado Civil</option>
+                                    <option value="Solteiro">Solteiro</option>
+                                    <option value="Casado">Casado</option>
+                                    <option value="Divorciado">Divorciado</option>
+                                    <option value="Viúvo">Viúvo</option>
+                                    <option value="Separado">Separado</option>
+                                    <option value="Relacionamento Sério">Relacionamento Sério</option>
+                                </select>
+                                <select name="signo" id="signo">
+                                    <option disabled selected>Signo</option>
+                                    <option value="Áries">Áries</option>
+                                    <option value="Touro">Touro</option>
+                                    <option value="Gêmeos">Gêmeos</option>
+                                    <option value="Câncer">Câncer</option>
+                                    <option value="Leão">Leão</option>
+                                    <option value="Virgem">Virgem</option>
+                                    <option value="Libra">Libra</option>
+                                    <option value="Escorpião">Escorpião</option>
+                                    <option value="Sagitário">Sagitário</option>
+                                    <option value="Capricórnio">Capricórnio</option>
+                                    <option value="Aquário">Aquário</option>
+                                    <option value="Peixes">Peixes</option>
+                                </select>
+                            </div>
+                            <small id="error_estado_civil_signo"></small>
+
+                            <div>
+                                <select name="etnia" id="etnia">
+                                    <option disabled selected>Etnia</option>
+                                    <option value="Branco">Branco</option>
+                                    <option value="Negro">Negro</option>
+                                    <option value="Pardo">Pardo</option>
+                                    <option value="Indígena">Indígena</option>
+                                    <option value="Amarelo">Amarelo</option>
+                                    <option value="Outros">Outros</option>
+                                </select>
+                                <select name="cor_cabelo" id="cor_cabelo">
+                                    <option disabled selected>Cor do Cabelo</option>
+                                    <option value="Preto">Preto</option>
+                                    <option value="Castanho">Castanho</option>
+                                    <option value="Loiro">Loiro</option>
+                                    <option value="Ruivo">Ruivo</option>
+                                    <option value="Grisalho">Grisalho</option>
+                                    <option value="Outros">Outros</option>
+                                </select>
+                            </div>
+                            <small id="error_etnia_cor_cabelo"></small>
+
+                            <div>
+                                <select name="cor_olhos" id="cor_olhos">
+                                    <option disabled selected>Cor dos Olhos</option>
+                                    <option value="Azul">Azul</option>
+                                    <option value="Verde">Verde</option>
+                                    <option value="Castanho">Castanho</option>
+                                    <option value="Preto">Preto</option>
+                                    <option value="Outro">Outro</option>
+                                </select>
+                                <select name="altura" id="altura">
+                                    <option disabled selected>Altura</option>
+                                    <option value="Abaixo de 1,50m">Abaixo de 1,50m</option>
+                                    <option value="1,50m - 1,60m">1,50m - 1,60m</option>
+                                    <option value="1,60m - 1,70m">1,60m - 1,70m</option>
+                                    <option value="1,70m - 1,80m">1,70m - 1,80m</option>
+                                    <option value="1,80m - 1,90m">1,80m - 1,90m</option>
+                                    <option value="Mais de 1,90m">Mais de 1,90m</option>
+                                </select>
+                            </div>
+                            <small id="error_cor_olhos_altura"></small>
+
+                            <div>
+                                <select name="tipo_corpo" id="tipo_corpo">
+                                    <option disabled selected>Tipo de Corpo</option>
+                                    <option value="Magro">Magro</option>
+                                    <option value="Normal">Normal</option>
+                                    <option value="Atlético">Atlético</option>
+                                    <option value="Gordo">Gordo</option>
+                                    <option value="Musculoso">Musculoso</option>
+                                    <option value="Outros">Outros</option>
+                                </select>
+                                <select name="fuma" id="fuma">
+                                    <option disabled selected>Fuma?</option>
+                                    <option value="Sim">Sim</option>
+                                    <option value="Não">Não</option>
+                                </select>
+                            </div>
+                            <small id="error_tipo_corpo_fuma"></small>
+
+                            <select name="bebe" id="bebe">
+                                <option disabled selected>Bebe?</option>
+                                <option value="Sim">Sim</option>
+                                <option value="Não">Não</option>
+                            </select>
+                            <small id="error_beber"></small>
+
+                            <p class="p-descricao">
+                                Descrição: 0/10000 caracteres escritos
+                            </p>
+                            <textarea name="descricao" id="descricao" maxlength="10000"
+                            cols="6" rows="5" placeholder="Fale um pouco sobre você"></textarea>
+                            <small id="error_descricao"></small>
+
+                            <p>
+                                Foto de perfil (de preferência, mande uma foto quadrada - com a mesma largura e altura)
+                            </p>
+                            <input type="file" name="foto" id="foto-perfil" accept="image/*">
+                            <small id="error_foto_perfil"></small>
+
+                            <div class="aceitar-termos"> 
+                                <label for="aceitar-termos">Você aceita a política de privacidade e os termos de condições?</label>
+                                <input type="checkbox" name="aceitar-termos" id="aceitar-termos" value="sim">
+                            </div>
+                            <a href="{% static 'arquivos/politica_privacidade_findb.pdf' %}" target="_blank">
+                                Política de Privacidade
+                            </a>
+                            <a href="{% static 'arquivos/termos_condicoes_findb.pdf' %}" target="_blank">
+                                Termos e Condições
+                            </a>
+                            <small id="error_aceitar_termos"></small>
+                            
+                            <div class="g-recaptcha" data-sitekey="{{RECAPTCHA_FRONT}}"></div>
+                            <span class="loader"></span>
+
+                            <small id="error_geral"></small>
+                            <div>
+                                <input type="submit" value="Vamos lá!" id="enviar">
+                                <a class="voltar">
+                                    Voltar
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="container-bandeiras">
+                <div>
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/albania.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/alderney.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/alemanha.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/andorra.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/austria.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/belgica.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/bielorrussia.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/bosniaherzegovina.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/bulgaria.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/chipre.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/croacia.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/dinamarca.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/escocia.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/eslovaquia.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/eslovenia.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/espanha.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/estonia.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/finlandia.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/franca.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/gra-bretanha.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/grecia.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/guernsey.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/holanda.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/hungria.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/ilhasaland.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/ilhasfaroe.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/inglaterra.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/irlanda.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/irlandadonorte.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/islandia.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/italia.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/iugoslavia.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/letonia.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/liechtenstein.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/lituania.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/luxemburgo.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/macedonia.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/malta.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/moldavia.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/monaco.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/montenegro.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/noruega.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/paisdegales.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/polonia.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/portugal.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/repcheca.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/romenia.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/russia.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/sanmarino.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/servia.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/suecia.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/suica.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/ucrania.jpg">
+                    <img src="https://www.sogeografia.com.br/figuras/bandeiras/europa/mini/vaticano.jpg">
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
+    <script src="{% static 'js/loginregistro.js' %}"></script>
+    <script src="{% static 'js/registro.js' %}"></script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <!-- Google Translate -->
+    <script type="text/javascript">
+    function googleTranslateElementInit() {
+        new google.translate.TranslateElement(
+            {pageLanguage: 'en'},
+            'google_translate_element'
+        );
+    } 
+    </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>

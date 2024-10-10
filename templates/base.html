@@ -1,0 +1,142 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    {% include 'parciais/_head.html' %}
+    {% block estilos %}{% endblock %}
+    <title> {% block titulo %} {% endblock %} </title>
+    <style>
+        #google_translate_element{
+            position: absolute;
+            left: 0;
+            top: 10rem;
+            z-index: 1000000000;
+        }
+    </style>
+</head>
+<body>
+    <!-- Google Translate -->
+    <div id="google_translate_element" class="desktop"></div> 
+    {% include 'parciais/_header.html' %}
+    {% block container %}{% endblock %}
+    {% include 'parciais/_footer.html' %}
+    {% block scripts %}{% endblock %}
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script src="{% static 'js/cabecalho.js' %}"></script>
+    <script src="{% static 'js/header.js' %}"></script>
+
+    <!-- Google Translate -->
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement(
+                {pageLanguage: 'en'},
+                'google_translate_element'
+            );
+        } 
+    </script>
+
+    <section class="box-ligacao"></section>
+    <audio controls id="som-ligacao" loop>
+        <source src="/static/audio_chamada.mp3/" type="audio/mpeg">
+    </audio>
+
+    <script>
+        function createBoxLigacao(obj){
+            const wsProtocol = window.location.protocol;
+            const wsHost = window.location.host;
+
+            const div = document.createElement('div');
+            div.classList.add('remetente-ligacao');
+            div.setAttribute('id', obj.id);
+
+            const aImg = document.createElement('a');
+            aImg.href = obj.link_remetente;
+            const img = document.createElement('img');
+            img.src = !obj.remetente_foto ? '/static/images/foto_user.png' : obj.remetente_foto;
+            img.alt = `${obj.remetente_nome} está te ligando - FINDB`;
+            aImg.appendChild(img);
+
+            const h3 = document.createElement('h3');
+            const i = document.createElement('i');
+            const span = document.createElement('span');
+            span.innerHTML = `Ligação de ${obj.tipo} de ${obj.remetente_nome}`;
+            i.classList.add('fa-solid');
+            i.classList.add('fa-phone');
+            h3.appendChild(i);
+            h3.appendChild(span);
+
+            const p = document.createElement('p');
+            p.innerHTML = obj.remetente_genero;
+
+            const aAceitar = document.createElement('a');
+            aAceitar.innerHTML = 'Atender';
+            aAceitar.setAttribute('href', `${wsProtocol}//${wsHost}/comunication/confirmar_chamada/${obj.id}/`);
+            const aRecusar = document.createElement('a');
+            aRecusar.innerHTML = 'Recusar';
+            aRecusar.setAttribute('href', `${wsProtocol}//${wsHost}/comunication/rejeitar_chamada/${obj.id}/`);
+            const aBloquear = document.createElement('a');
+            aBloquear.setAttribute('href', `${wsProtocol}//${wsHost}/comunication/bloquear_usuario/${obj.remetente_slug}/`)
+            aBloquear.innerHTML = 'Bloquear';
+
+            div.appendChild(aImg);
+            div.appendChild(h3);
+            div.appendChild(p);
+            div.appendChild(aAceitar);
+            div.appendChild(aRecusar);
+            div.appendChild(aBloquear);
+            return div;
+        }
+        
+        const boxLigacao = document.querySelector('.box-ligacao');
+
+        const wsProtocol = window.location.protocol;
+        const wsHost = window.location.host;
+        const intervalo = setInterval(() => {
+            fetch(`${wsProtocol}//${wsHost}/comunication/get_comunications/{{request.session.get_perfil_slug}}/`)
+            .then(response => response.json())
+            .then(data => {
+                //console.log(data);
+                if(!data.error){
+                    for(let info of Object.values(data)){
+                        let inserir = true;
+                        for (let child of boxLigacao.children) {
+                            let idChild = child.getAttribute('id');
+                            if(idChild == info.id){
+                                inserir = false;
+                                break;
+                            }
+                        };
+
+                        for (let child of boxLigacao.children) {
+                            let idChild = child.getAttribute('id');
+                            if(!Object.keys(data).includes(idChild)){
+                                child.remove();
+                                continue;
+                            }
+                        };
+
+                        if(inserir){
+                            const div = createBoxLigacao(info);
+                            boxLigacao.appendChild(div);
+                            boxLigacao.style.display = 'flex';
+                            setTimeout(() => {
+                                const boxLigacaoAudio = document.querySelector('#som-ligacao');
+                                boxLigacaoAudio.play();
+                            }, 1000);
+                        } 
+                    }
+                }
+                else if(data.error){
+                    boxLigacao.innerHTML = '';
+                    boxLigacao.style.display = 'none';
+                    const boxLigacaoAudio = document.querySelector('#som-ligacao');
+                    boxLigacaoAudio.pause();
+                }            
+            })
+        }, 1000);
+    </script>
+
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>

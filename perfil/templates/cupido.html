@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block estilos %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/cupido.css' %}">
+{% endblock %}
+{% block titulo %}
+    {{perfil.nome}} - Perfil - FINDB
+{% endblock %}
+
+{% block container %} 
+
+    <main class="container">
+        <div>
+            <h1>
+                PERFIL DO CUPIDO
+            </h1>
+            <div class="area-perfil">
+                <div class="perfil">
+                    <div class="perfil-cabecalho">
+                        <div>
+                            {% if cupido.foto %}
+                                <img src="{{cupido.foto.url}}" alt="{{cupido.nome}} - FINDB">
+                            {% else %}
+                                <img src="{% static 'images/foto_user.png' %}" alt="{{cupido.nome}} - FINDB">
+                            {% endif %}
+                            <h1>
+                                {{cupido.nome}}
+                            </h1>
+                        </div>
+                    </div>
+                    <h2>
+                        Sobre mim
+                    </h2> 
+                    <div class="informacoes">
+                        {% if not cupido.usuario %}
+                            <p>
+                                <img src="{% static 'images/ok.png' %}" alt="{{cupido.nome}} - FINDB">
+                                Estre cupido pode participar de video chamadas
+                            </p>
+                        {% else %}
+                            <p>
+                                <img src="{% static 'images/block.png' %}" alt="{{cupido.nome}} - FINDB">
+                                Apenas os cupidos administradores do site podem participar de video chamadas
+                            </p>
+                            <p>
+                                <a href="{% url 'perfil' slug_usuario %}">
+                                    Acessar perfil
+                                </a>
+                            </p>
+                        {% endif %}
+                        <p>
+                            <strong>
+                                País: 
+                            </strong>
+                            {{cupido.pais}}
+                        </p>
+                        <p>
+                            <strong>
+                                Cidade: 
+                            </strong>
+                            {{cupido.cidade}}
+                        </p>
+                    </div>
+                    
+                </div>
+                {% if page_obj %}
+                    <h2>
+                        {{qtd}}
+                    </h2>
+                    {% if request.GET.p %}
+                        <h3>
+                            Página atual: {{request.GET.p}} de {{page_obj.paginator.num_pages}}
+                        </h3>
+                    {% else %}
+                        <h3>
+                            Página atual: 1 de {{page_obj.paginator.num_pages}}
+                        </h3>
+                    {% endif %}
+                    <div class="indicacoes">
+                        {% for indicacao in page_obj %}
+                            <a href="{% url 'perfil' indicacao.slug %}" class="indicacao">
+                                {% if indicacao.foto %}
+                                    <img src="{{indicacao.foto.url}}" alt="{{indicacao.nome}} - FINDB">
+                                {% else %}
+                                    <img src="{% static 'images/foto_user.png' %}" alt="{{indicacao.nome}} - FINDB">
+                                {% endif %}
+                                <div>
+                                    <p>
+                                        {{indicacao.nome}} - {{indicacao.idade}}
+                                    </p>
+                                    <small>
+                                        {{indicacao.pais}}
+                                    </small>
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <h2>
+                        AINDA NÃO INDICOU NINGUÉM
+                    </h2>
+                {% endif %}
+
+                {% include 'parciais/_pagination_cupido.html' %}
+            </div>
+        </div>
+    </main>
+
+{% endblock %}
+

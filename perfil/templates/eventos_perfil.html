@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block estilos %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/eventos_perfil.css' %}">
+{% endblock %}
+{% block titulo %}
+    Meus Eventos - FINDB
+{% endblock %}
+
+{% block container %} 
+
+    <main class="container">
+        <div>
+            {% if page_obj %}
+                <h1>
+                    Meus Eventos ({{qtd}})
+                </h1>
+                <div class="eventos">
+                    {% for participacao in page_obj %}
+                        <div class="evento">
+                            {% csrf_token %}
+                            <div>
+                                {% if participacao.evento.foto %}
+                                    <a href="{% url 'evento' participacao.evento.slug %}">
+                                        <img src="{{participacao.evento.foto.url}}" alt="{{participacao.evento.nome}} - FINDB">
+                                    </a>
+                                {% else %}
+                                    <a href="{% url 'evento' participacao.evento.slug %}">  
+                                        <img src="{% static 'images/evento_sem_foto_presencial.jpg' %}" alt="{{participacao.evento.nome}} - FINDB">            
+                                    </a>
+                                {% endif %}
+                                <div>
+                                    <div class="botoes">
+                                        <a href="{% url 'evento' participacao.evento.slug %}">
+                                            <i class="fa-regular fa-calendar-days"></i>
+                                            Ver evento
+                                        </a>
+                                        {% if participacao.evento.tipo == 'Presencial' and participacao.evento.link_localizacao %}
+                                            <a href="{{participacao.evento.link_localizacao}}" target="_blank">
+                                                <i class="fa-solid fa-location-dot"></i>
+                                                Localização
+                                            </a>
+                                        {% endif %}
+                                        {% if participacao.img_qrcode %}
+                                            <a href="{{participacao.img_qrcode.url}}" style="background: black;" target="_blank">
+                                                <i class="fa-solid fa-qrcode"></i>
+                                                Baixar qrcode
+                                            </a>
+                                        {% endif %}
+                                        {% if participacao.bilhete %}
+                                            <a href="{{participacao.bilhete.url}}" style="background: black;" target="_blank">
+                                                <i class="fa-solid fa-envelope"></i>
+                                                Baixar bilhete
+                                            </a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <p>
+                                <strong>
+                                    Valor:
+                                </strong>
+                                {% if participacao.evento.pagamento != 'Gratuito' %}
+                                    € {{participacao.evento.valor}}
+                                {% else %}
+                                    Gratuito
+                                {% endif %}
+                            </p>
+                            <p>
+                                <strong>
+                                    Data e Horário:
+                                </strong>
+                                {{participacao.evento.data}}
+                            </p>
+                            {% if participacao.evento.tipo == 'Online' and participacao.evento.link_reuniao %}
+                                <p>
+                                    <strong>
+                                        Link reunião:
+                                    </strong>
+                                    {{participacao.evento.link_reuniao}}
+                                </p>
+                            {% endif %}
+                            {% if participacao.evento.tipo == 'Presencial' and participacao.evento.localizacao %}
+                                <p>
+                                    <strong>
+                                        Localização:
+                                    </strong>
+                                    {{participacao.evento.localizacao}}
+                                </p>
+                            {% endif %}
+                            <p>
+                                <strong>
+                                    Descrição:
+                                </strong>
+                                {{participacao.evento.descricao}}
+                            </p>
+                        </div>
+                    {% endfor %}
+                </div>
+                {% include 'parciais/_pagination_evento.html' %}
+            {% else %}
+                <h1>
+                    Meus Eventos (0)
+                </h1>
+            {% endif %}
+        </div>
+    </main>
+
+{% endblock %}
+

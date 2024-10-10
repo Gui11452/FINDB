@@ -1,0 +1,19 @@
+#branding a img{
+    width: 10rem !important;
+}
+
+#header, #header nav, form .submit-row input{
+    background: #d8385e !important;
+}
+
+.breadcrumbs, #content caption, #main caption, #changelist-filter h2, .paginator a{
+    background: #343746 !important;
+}
+
+body{
+    background: #eeeeee;
+}
+
+#content h1{
+    font-weight: bold;
+}

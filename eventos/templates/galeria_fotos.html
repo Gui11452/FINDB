@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load filters_eventos %}
+{% block estilos %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/galeria_fotos.css' %}">
+{% endblock %}
+{% block titulo %}
+    Eventos Online - FINDB
+{% endblock %}
+
+{% block container %} 
+
+    <main class="container">
+        <div>
+            {% if evento.galeria %}
+                <h1>
+                    {{evento.nome}}
+                </h1>
+                <h2>
+                    Galeria de fotos
+                </h2>
+                <div class="galeria">
+                    {% if evento.galeria.foto1 %}
+                        <img src="{{evento.galeria.foto1.url}}" alt="{{evento.nome}}">
+                    {% endif %}
+                    {% if evento.galeria.foto2 %}
+                        <img src="{{evento.galeria.foto2.url}}" alt="{{evento.nome}}">
+                    {% endif %}
+                    {% if evento.galeria.foto3 %}
+                        <img src="{{evento.galeria.foto3.url}}" alt="{{evento.nome}}">
+                    {% endif %}
+                    {% if evento.galeria.foto4 %}
+                        <img src="{{evento.galeria.foto4.url}}" alt="{{evento.nome}}">
+                    {% endif %}
+                    {% if evento.galeria.foto5 %}
+                        <img src="{{evento.galeria.foto5.url}}" alt="{{evento.nome}}">
+                    {% endif %}
+                </div>
+            {% else %}
+                <h1>
+                    Esse evento não possui galeria.
+                </h1>
+            {% endif %}
+            <a href="{% url 'evento' evento.slug %}">
+                Voltar
+            </a>
+        </div>
+    </main>
+
+{% endblock %}
+{% block scripts %}
+    <script src="{% static 'js/evento.js' %}"></script>
+{% endblock %}
+

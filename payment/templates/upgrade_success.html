@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block estilos %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/success_reject.css' %}">
+{% endblock %}
+{% block titulo %}
+    Pedido Atualizado com Sucesso - FINDB
+{% endblock %}
+
+{% block container %} 
+
+    <main class="container">
+        <div>
+            <div class="status">
+                <img src="{% static 'images/logo.jpeg' %}" alt="Pedido Aprovado - FINDB">
+                <h1>
+                    O seu pedido foi 
+                    <span style="color: green;">
+                        atualizado
+                    </span> com sucesso
+                </h1>
+                <p>
+                    Parabéns, agora você pode desfrutar das suas novas funcionalidades que o seu plano oferece 💖
+                </p>
+                
+                <a href="{% url 'filtro' %}">
+                    Ache a sua pessoa ideal
+                </a>
+            </div>
+        </div>
+    </main>
+
+{% endblock %}

@@ -1,0 +1,200 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block estilos %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/notificacoes.css' %}">
+{% endblock %}
+{% block titulo %}
+    Notificações - FINDB
+{% endblock %}
+
+{% block container %} 
+
+    <main class="container">
+        <div>
+            {% if request.session.get_perfil_slug %}
+                <h1>
+                    Notificações ({{request.session.qtd_notificacoes}})
+                </h1>
+
+                {% include 'parciais/_messages.html' %}
+                <div class="notificacoes">
+                    {% for notificacao in page_obj %}
+                    <div class="notificacao">
+                        <div>
+                            {% if notificacao.convite_evento and notificacao.convite_evento.destinatario.slug == request.session.get_perfil_slug %}
+                                {% if notificacao.convite_evento.evento.foto %}
+                                    <a href="{% url 'evento' notificacao.convite_evento.evento.slug %}">
+                                        <img src="{{notificacao.convite_evento.evento.foto.url}}" alt="{{notificacao.convite_evento.evento.nome}} - FINDB">
+                                    </a>
+                                {% endif %}
+                                <div>
+                                    <h3>
+                                        Você foi convidado por 
+                                        <a href="{% url 'perfil' notificacao.convite_evento.remetente.slug %}">
+                                            "{{notificacao.convite_evento.remetente.nome}}"
+                                        </a>
+                                        para o evento "{{notificacao.convite_evento.evento.nome}}"
+                                    </h3>
+                                    <a href="{% url 'evento' notificacao.convite_evento.evento.slug %}" id="botao-notificacao">
+                                        <i class="fa-solid fa-envelope"></i>
+                                        Aceitar convite
+                                    </a>
+                                    {% if notificacao.convite_evento.confirmacao == 'Pendente' %}
+                                        <a id="rejeitar_notificacao" href="{% url 'rejeitar_notificacao' notificacao.id %}">
+                                            <i class="fa-solid fa-square-xmark"></i>
+                                            Rejeitar convite
+                                        </a>
+                                    {% elif notificacao.convite_evento.confirmacao == 'Confirmado' %}
+                                        <small class="confirmado">
+                                            Convite confirmado
+                                        </small>
+                                    {% else %}
+                                        <small class="rejeitado">
+                                            Convite rejeitado
+                                        </small>
+                                    {% endif %}
+                                </div>
+                            {% elif notificacao.video_chamada and notificacao.video_chamada.destinatario.slug == request.session.get_perfil_slug %}
+                                <a href="{% url 'chamada_video' notificacao.video_chamada.id %}">
+                                    {% if notificacao.video_chamada.remetente.foto %}
+                                        <img src="{{notificacao.video_chamada.remetente.foto.url}}" alt="Convite Vídeo Chamada - FINDB">
+                                    {% else %}
+                                        <img style="max-width: 10rem;" src="{% static 'images/foto_user.png' %}" alt="Convite Vídeo Chamada - FINDB">
+                                    {% endif %}
+                                </a>
+                                <div>
+                                    <h3>
+                                        Você foi convidado por 
+                                        <a href="{% url 'perfil' notificacao.video_chamada.remetente.slug %}">
+                                            "{{notificacao.video_chamada.remetente.nome}}"
+                                        </a>
+                                        para uma chamada de vídeo
+                                    </h3>
+                                    <a href="{% url 'chamada_video' notificacao.video_chamada.id  %}" id="botao-notificacao">
+                                        <i class="fa-solid fa-video"></i>
+                                        Ver mais
+                                    </a>
+                                    {% if notificacao.video_chamada.confirmacao == 'Pendente' %}
+                                        <a id="rejeitar_notificacao" href="{% url 'rejeitar_notificacao' notificacao.id %}">
+                                            <i class="fa-solid fa-square-xmark"></i>
+                                            Rejeitar convite
+                                        </a>
+                                    {% elif notificacao.video_chamada.confirmacao == 'Confirmado' %}
+                                        <small class="confirmado">
+                                            Convite confirmado
+                                        </small>
+                                    {% else %}
+                                        <small class="rejeitado">
+                                            Convite rejeitado
+                                        </small>
+                                    {% endif %}
+                                </div>
+                            {% elif notificacao.convite_evento and notificacao.convite_evento.remetente.slug == request.session.get_perfil_slug %}
+                                {% if notificacao.convite_evento.evento.foto %}
+                                    <a href="{% url 'evento' notificacao.convite_evento.evento.slug %}">
+                                        <img src="{{notificacao.convite_evento.evento.foto.url}}" alt="{{notificacao.convite_evento.evento.nome}} - FINDB">
+                                    </a>
+                                {% endif %}
+                                <div>
+                                    <h3>
+                                        Você convidou 
+                                        <a href="{% url 'perfil' notificacao.convite_evento.destinatario.slug %}">
+                                            "{{notificacao.convite_evento.destinatario.nome}}"
+                                        </a>
+                                        para o evento "{{notificacao.convite_evento.evento.nome}}"
+                                    </h3>
+                                    <p>
+                                        <i class="fa-regular fa-clock"></i>
+                                        Convite enviado
+                                    </p>
+                                    {% if notificacao.convite_evento.confirmacao and notificacao.confirmacao == 'Rejeitado' %}
+                                        <small class="rejeitado">
+                                            Rejeitado
+                                        </small>
+                                        <a href="{% url 'apagar_notificacao' notificacao.id %}" id="apagar-notificacao">
+                                            O destinatário rejeitou o seu convite, clique para apagar a notificação
+                                        </a>
+                                    {% elif notificacao.convite_evento.confirmacao and notificacao.confirmacao == 'Confirmado' %}
+                                        <small class="confirmado">
+                                            Confirmado
+                                        </small>
+                                        <a href="{% url 'apagar_notificacao' notificacao.id %}" id="apagar-notificacao">
+                                            O destinatário confirmou o seu convite, clique para apagar a notificação
+                                        </a>
+                                    {% else %}
+                                        <small class="pendente">
+                                            Pendente
+                                        </small>
+                                    {% endif %}
+                                </div>
+                            {% elif notificacao.video_chamada and notificacao.video_chamada.remetente.slug == request.session.get_perfil_slug %}
+                                <a href="{% url 'chamada_video' notificacao.video_chamada.id  %}">
+                                    <img style="max-width: 10rem;" src="{% static 'images/video-chamada.png' %}" alt="Convite Vídeo Chamada - FINDB">
+                                </a>
+                                <div>
+                                    <h3>
+                                        Você convidou 
+                                        <a href="{% url 'perfil' notificacao.video_chamada.destinatario.slug %}">
+                                            "{{notificacao.video_chamada.destinatario.nome}}"
+                                        </a>
+                                        para uma chamada de vídeo
+                                    </h3>
+                                    <a href="{% url 'chamada_video' notificacao.video_chamada.id  %}" id="botao-notificacao">
+                                        <i class="fa-solid fa-video"></i>
+                                        Ver mais
+                                    </a>
+                                    {% if notificacao.video_chamada.confirmacao and notificacao.confirmacao == 'Rejeitado' %}
+                                        <small class="rejeitado">
+                                            Rejeitado
+                                        </small>
+                                        <a href="{% url 'apagar_notificacao' notificacao.id %}" id="apagar-notificacao">
+                                            O destinatário rejeitou o seu convite, clique para apagar a notificação
+                                        </a>
+                                    {% elif notificacao.video_chamada.confirmacao and notificacao.confirmacao == 'Confirmado' %}
+                                        <small class="confirmado">
+                                            Confirmado
+                                        </small>
+                                        <a href="{% url 'apagar_notificacao' notificacao.id %}" id="apagar-notificacao">
+                                            O destinatário confirmou o seu convite, clique para apagar a notificação
+                                        </a>
+                                    {% else %}
+                                        <small class="pendente">
+                                            Pendente
+                                        </small>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        {% if notificacao.convite_evento %}
+                            <strong>
+                                Data do evento: {{notificacao.convite_evento.evento.data}}
+                            </strong>
+                        {% elif notificacao.video_chamada %}
+                            <strong>
+                                Data da vídeo chamada: {{notificacao.video_chamada.data}}
+                            </strong>
+                        {% endif %}
+                        {% if notificacao.convite_evento.descricao %}
+                            <p>
+                                {{notificacao.convite_evento.descricao}}
+                            </p>
+                        {% elif notificacao.video_chamada.descricao %}
+                            <p>
+                                {{notificacao.convite_evento.descricao}}
+                            </p>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% include 'parciais/_pagination_cupido.html' %}
+
+            {% else %}
+                <h1>
+                    Você não tem nenhuma notificação
+                </h1>
+            {% endif %}
+        </div>
+    </main>
+
+{% endblock %}
+

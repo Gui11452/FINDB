@@ -1,0 +1,246 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap'); */
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    outline: 0;
+    box-sizing: border-box;
+    list-style: none;
+    border-collapse: collapse;
+    text-decoration: none;
+}
+
+html{
+    font-size: 62.5%;
+}
+
+body{
+    font-size: 1.5rem;
+    width: 100%;
+    font-family: var(--fonte-paragrafos);
+    background: var(--cor-branco);
+}
+
+h1, h2, h3, h4, h5, h6{
+    font-family: var(--fonte-titulos) !important;
+}
+
+:root{
+    --cor-principal: #9152d9;
+    --cor-principal-linear: linear-gradient(221.26deg, #c548ab -3.4%, #635bff 101%);
+    --cor-secundaria: #d8385e;
+    --cor-preto: black;
+    --cor-branco: #fff;
+    --cor-cinza: #343746;
+    /* --fonte-titulos: 'Poppins', sans-serif; */
+    --fonte-titulos: "Manrope", sans-serif;
+    --fonte-paragrafos: 'Montserrat', sans-serif;
+}
+
+.sucesso, .erro, .info{
+    border-radius: 1rem;
+    padding: 1rem 2rem;
+    font-weight: bold;
+    width: 100%;
+    text-align: center;
+}
+
+.sucesso{
+    color: var(--cor-preto);
+    background: #2ff15d;
+}
+
+.erro{
+    color: var(--cor-branco);
+    background: #e71717;
+}
+
+.info{
+    color: var(--cor-preto);
+    background: #0aa2e9;
+}
+
+/* Login - Início */
+
+.container{
+    width: 100%;
+    padding: 2rem;
+    background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0)), url('../images/pessoas1.jpg') center;
+    background-size: cover;
+    min-height: 100vh;
+    /* animation: animation-background 1s linear 1s forwards; */
+}
+
+@keyframes animation-background{
+    0%{
+        opacity: 1;
+    }
+    50%{
+        opacity: 0.5;
+    }
+    100%{
+        background: var(--cor-branco);
+        opacity: 0;
+    }
+}
+
+.container>div{
+    width: 90%;
+    margin: 0 auto;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 2rem;
+}
+
+.titulo{
+    width: 100%;
+    padding: 2rem;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.titulo h1{
+    background: var(--cor-secundaria);
+    color: var(--cor-branco);
+    padding: 1rem;
+    width: 45rem;
+    text-align: center;
+}
+
+.container-loginregistro{
+    min-height: 60vh;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.container-loginregistro img{
+    max-width: 20rem;
+}
+
+.loginregistro{
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 2rem;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    box-shadow: 0.2rem 0.2rem 2rem var(--cor-preto);
+    background: var(--cor-branco);
+    width: 50rem;
+    border-radius: 2rem;
+}
+
+.loginregistro form{
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 1rem;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+}
+
+.loginregistro form input{
+    width: 100%;
+    padding: 1rem 2rem;
+    border: 0.2rem solid #ccc;
+    border-radius: 2rem;
+    font-family: var(--fonte-paragrafos);
+    transition: .3s;
+}
+
+.loginregistro>a:nth-of-type(2){
+    width: 100%;
+    text-align: left;
+    color: var(--cor-preto);
+}
+
+.loginregistro>a:hover{
+    text-decoration: underline;
+}
+
+.loginregistro form input::placeholder{
+    color: var(--cor-preto);
+}
+
+.loginregistro form input:focus{
+    transform: scale(1.01);
+}
+
+.loginregistro form input:nth-of-type(3){
+    padding: 1rem 2rem;
+    background: #28a744;
+    border-radius: 2rem;
+    color: var(--cor-branco);
+    transition: .3s;
+    border: none;
+    border-radius: 2rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    font-family: var(--fonte-paragrafos);
+}
+
+.loginregistro form input:nth-of-type(3):hover{
+    transform: scale(1.05);
+}
+
+.loader{
+    display: none;
+    width: 5rem;
+    height: 5rem;
+    border: 0.4rem solid var(--cor-preto);
+    border-top: 0.4rem solid blue;
+    border-radius: 50%;
+    animation: rotate-loader 1s linear infinite;
+}
+
+@keyframes rotate-loader{
+    100%{
+        transform: rotate(360deg);
+    }
+}
+
+.container-bandeiras{
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.container-bandeiras>div{
+    display: flex;
+    gap: 1rem;
+    animation: translate-bandeiras 120s infinite;
+}
+
+.container-bandeiras img{
+    width: 100%;
+    height: 4rem;
+}
+
+@keyframes translate-bandeiras{
+    0%{
+        transform: translateX(0rem);
+    }
+    50%{
+        transform: translateX(-400rem);
+    }
+    100%{
+        transform: translateX(0);
+    }
+}
+
+/* Login - Fim */
+
+@media(max-width: 580px){
+    html{
+        font-size: 50%;
+    }
+
+    .loginregistro, .container-bandeiras{
+        width: 100%;
+    }
+}

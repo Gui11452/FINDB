@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block estilos %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/profissionais_relacionamento.css' %}">
+{% endblock %}
+{% block titulo %}
+    Profissionais em Relacionamento - FINDB
+{% endblock %}
+
+{% block container %} 
+
+    <main class="container">
+        <div>
+            {% if page_obj %}
+                <h1>
+                    Profissionais de Relacionamento ({{qtd}})
+                </h1>
+
+                <div class="profissionais">
+                    {% for profissional in page_obj %}
+                        <div class="profissional">
+                            {% if profissional.profilePhoto %}
+                                <a href="https://m42api.m-21.tech/{{profissional.profilePhoto}}">  
+                                    <img src="https://m42api.m-21.tech/{{profissional.profilePhoto}}" alt="{{profissional.name}} - FINDB">               
+                                </a>
+                            {% else %}
+                                <img src="{% static 'images/foto_user.png' %}" alt="{{profissional.name}} - FINDB">
+                            {% endif %}
+                            <h3>
+                                {{profissional.name}}
+                            </h3>
+                            <h4>
+                                € {{profissional.consultationFee}}
+                            </h4>
+                            <p>
+                                <strong>
+                                    Tipo de consulta:
+                                </strong>
+                                {% if profissional.consultationType == 'presential' %}
+                                    Presencial
+                                {% else %}
+                                    Online
+                                {% endif %}
+                            </p>
+                            <p>
+                                <strong>
+                                    Qualificação:
+                                </strong>
+                                {{profissional.qualification}}
+                            </p>
+                            <p>
+                                <strong>
+                                    Experiência:
+                                </strong>
+                                {{profissional.experience}}
+                            </p>
+    
+                            <div class="botoes">
+                                <a href="{% url 'profissional' profissional.uid %}">
+                                    Ver mais
+                                </a>
+                                <a href="{{profissional.website}}">
+                                    Marcar consulta
+                                </a>
+                            </div>
+                            
+                        </div>
+                    {% endfor %}
+                    {% include 'parciais/_pagination_evento.html' %}
+                </div>
+            {% else %}
+                <h1>
+                    Nenhum profissional disponível no momento
+                </h1>
+            {% endif %}
+            
+        </div>
+    </main>
+
+{% endblock %}
+{% block scripts %}
+    <script src="{% static 'js/cupidos.js' %}"></script>
+{% endblock %}

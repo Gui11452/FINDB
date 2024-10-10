@@ -1,0 +1,693 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load filters_eventos %}
+{% block estilos %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/evento.css' %}">
+{% endblock %}
+{% block titulo %}
+    Eventos Online - FINDB
+{% endblock %}
+
+{% block container %} 
+
+    <main class="container">
+        <div>
+            {% if evento %}
+                <h1>
+                    {{evento.nome}}
+                </h1>
+                {% include 'parciais/_messages.html' %}
+                <form method="POST" action="{% url 'evento' evento.slug %}" class="evento">
+                    {% csrf_token %}              
+                    <div class="coluna1">
+                        {% if evento.video %}
+                            <iframe
+                            src="{{evento.video}}" 
+                            title="YouTube video player" frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                        {% endif %}
+                        {% if evento.video2 %}
+                            <video controls controlsList="nodownload">
+                                <source src="{{evento.video2.url}}" >
+                                Seu navegador não suporta a tag de vídeo.
+                            </video>
+                        {% endif %}
+                        <div class="metricas">
+                            <div>
+                                <img src="{% static 'images/verificacao.png' %}" alt="Evento - Métricas">
+                                <h2>
+                                    Verificado
+                                </h2>
+                            </div>
+                            <div>
+                                <img src="{% static 'images/grafico.png' %}" alt="Evento - Métricas">
+                                <h2>
+                                    Popular
+                                </h2>
+                            </div>
+                            <div>
+                                {% if evento.tipo == 'Presencial' %}
+                                    <img src="{% static 'images/presencial.png' %}" alt="Evento - Métricas">
+                                {% else %}
+                                    <img src="{% static 'images/online.png' %}" alt="Evento - Métricas">
+                                {% endif %}
+                                <h2>
+                                    {{evento.tipo}}
+                                </h2>
+                            </div>
+                        </div>
+
+                        {% if evento.galeria %}
+                            <a class="btn_evento" href="{% url 'galeria_fotos' evento.slug %}">
+                                Ver galeria
+                            </a>
+                        {% endif %}
+                        <div class="informacoes-gerais">
+                            <h3>
+                                Informações Gerais
+                            </h3>
+                            <div>
+                                <div>
+                                    <p>
+                                        <i class="fa-solid fa-clock"></i>
+                                        Período:
+                                        <strong>
+                                            {{evento.duracao_numero}} {{evento.duracao_tipo}}
+                                        </strong>
+                                    </p>
+                                    <p>
+                                        <i class="fa-solid fa-icons"></i>
+                                        Categoria:
+                                        {% if evento.categoria %}
+                                            <strong>
+                                                {{evento.categoria.nome|title}}
+                                            </strong>
+                                        {% else %}
+                                            <strong>
+                                                Não tem
+                                            </strong>
+                                        {% endif %}
+                                    </p>
+                                    <p>
+                                        <i class="fa-solid fa-user"></i>
+                                        Gênero:
+                                        {% if evento.divisao_genero == 'mulher' or evento.divisao_genero == 'homem' %}
+                                            <strong>
+                                                {{evento.divisao_genero|title}}
+                                            </strong>
+                                        {% elif evento.divisao_genero == 'metade' %}
+                                            <strong>
+                                                50% homem e 50% mulher
+                                            </strong>
+                                        {% else %}
+                                            <strong>
+                                                Todos
+                                            </strong>
+                                        {% endif %}
+                                    </p>
+                                    <p>
+                                        <i class="fa-solid fa-user"></i>
+                                        Quantidade máxima de pessoas:
+                                        {% if evento.divisao_genero == 'mulher' %}
+                                            <strong>
+                                                {{evento.maximo_participantes|format_mulher_participantes_evento}}
+                                            </strong>
+                                        {% elif evento.divisao_genero == 'metade' %}
+                                            <strong>
+                                                {{evento.maximo_participantes|format_metade_participantes_evento}}
+                                            </strong>
+                                        {% elif evento.divisao_genero == 'homem' %}
+                                            <strong>
+                                                {{evento.maximo_participantes|format_homem_participantes_evento}}
+                                            </strong>
+                                        {% else %}
+                                            <strong>
+                                                {{evento.maximo_participantes|format_pessoa_participantes_evento}}
+                                            </strong>
+                                        {% endif %}
+                                    </p>
+                                    <p>
+                                        <i class="fa-solid fa-user"></i>
+                                        Quantidade de vagas restantes:
+
+                                        {% if evento.divisao_genero == 'mulher' and not cheio %}
+                                            <strong>
+                                                {{evento.qtd_participantes|format_mulher_participantes_evento}}
+                                            </strong>
+                                        {% elif evento.divisao_genero == 'homem' and not cheio %}
+                                            <strong>
+                                                {{evento.qtd_participantes|format_homem_participantes_evento}}
+                                            </strong>
+                                        {% elif evento.divisao_genero == 'nenhum' and not cheio %}
+                                            <strong>
+                                                {{evento.qtd_participantes|format_pessoa_participantes_evento}}
+                                            </strong>
+                                        {% elif evento.divisao_genero == 'metade' and not cheio_homem and not cheio_mulher %}
+                                            <strong>
+                                                {{evento.qtd_participantes_homens|format_homem_participantes_evento}}
+                                                e
+                                                {{evento.qtd_participantes_mulheres|format_mulher_participantes_evento}}
+                                            </strong>
+
+                                        {% elif evento.divisao_genero == 'metade' %}
+                                            <strong>
+                                                {% if not cheio_homem %}
+                                                    {{evento.qtd_participantes_homens|format_homem_participantes_evento}}
+                                                {% else %}
+                                                    <span style="color: red">
+                                                        ESGOTADO HOMENS
+                                                    </span>
+                                                {% endif %}
+                                                e
+                                                {% if not cheio_mulher %}
+                                                    {{evento.qtd_participantes_mulheres|format_mulher_participantes_evento}}
+                                                {% else %}
+                                                    <span style="color: red">
+                                                        ESGOTADO MULHERES
+                                                    </span>
+                                                {% endif %}
+                                            </strong>
+
+                                        {% elif cheio %}
+                                            <strong style="color: red">
+                                                ESGOTADO
+                                            </strong>
+                                        {% endif %}
+                                    </p>
+                                    
+                                    {% if evento.tipo == 'Presencial' and evento.localizacao %}
+                                        <p>
+                                            <i class="fa-solid fa-location-dot"></i>
+                                            Localização do Evento:
+                                            <strong>
+                                                {{evento.localizacao}}
+                                            </strong>
+                                        </p>
+                                    {% endif %}
+
+                                    {% if evento.tipo == 'Presencial' and evento.localizacao_inicio %}
+                                        <p>
+                                            <i class="fa-solid fa-location-dot"></i>
+                                            Localização de Partida:
+                                            <strong>
+                                                {{evento.localizacao_inicio}}
+                                            </strong>
+                                        </p>
+                                    {% endif %}
+
+                                    {% if evento.itens_inclusos %}
+                                        <p>
+                                            <i class="fa-solid fa-circle-check"></i>
+                                            Itens Inclusos:
+                                            {% for item_incluso in evento.itens_inclusos.all %}
+                                                <strong>
+                                                    {{item_incluso}}
+                                                </strong>
+                                            {% endfor %}
+                                        </p>
+                                    {% endif %}
+
+                                    {% if evento.lugares_visitas %}
+                                        <p>
+                                            <i class="fa-solid fa-map-pin"></i>
+                                            Lugares que serão visitados:
+                                            {% for lugar_visita in evento.lugares_visitas.all %}
+                                                <strong>
+                                                    {{lugar_visita}}
+                                                </strong>
+                                            {% endfor %}
+                                        </p>
+                                    {% endif %}
+
+                                    {% if evento.detalhes_dias %}
+                                        <p>
+                                            <i class="fa-solid fa-calendar-days"></i>
+                                            Detalhes dos Dias:
+                                            {% for detalhe_dia in evento.detalhes_dias.all %}
+                                                <strong>
+                                                    {{detalhe_dia}}
+                                                </strong>
+                                            {% endfor %}
+                                        </p>
+                                    {% endif %}
+                                     
+                                </div>
+                                
+                                <div>
+                                    {% if evento.faixa_etaria %}
+                                        <p>
+                                            <i class="fa-solid fa-person"></i>
+                                            Faixa Etária:
+                                            <strong>
+                                                {{evento.faixa_etaria}}
+                                            </strong>
+                                        </p>
+                                    {% endif %}
+                                    {% if not evento.permanencia_noturna %}
+                                        <section>
+                                            <img src="{% static 'images/block.png' %}" alt="FINDB - Evento - {{evento.nome}}">
+                                            Sem permanência noturna
+                                        </section>
+                                    {% else %}
+                                        <section>
+                                            <img src="{% static 'images/ok.png' %}" alt="FINDB - Evento - {{evento.nome}}">
+                                            Permanência noturna
+                                        </section>
+                                    {% endif %}
+
+                                    {% if evento.pagamento != 'Gratuito' %}
+                                        {% if evento.divisao_genero == 'metade' %}
+                                            <p>
+                                                <i class="fa-solid fa-money-bill"></i>
+                                                Valor Homem:
+                                                <strong>€ {{evento.valor_homem}}</strong>
+                                            </p>
+                                            <p>
+                                                <i class="fa-solid fa-money-bill"></i>
+                                                Valor Mulher:
+                                                <strong> € {{evento.valor_mulher}} </strong>
+                                            </p>
+                                        {% elif evento.divisao_genero == 'nenhum' %}
+                                            {% if evento.valor == 0 %}
+                                                <p>
+                                                    <i class="fa-solid fa-money-bill"></i>
+                                                    Valor Homem:
+                                                    <strong>€ {{evento.valor_homem}}</strong>
+                                                </p>
+                                                <p>
+                                                    <i class="fa-solid fa-money-bill"></i>
+                                                    Valor Mulher:
+                                                    <strong> € {{evento.valor_mulher}} </strong>
+                                                </p>
+                                            {% else %}
+                                                <p>
+                                                    <i class="fa-solid fa-money-bill"></i>
+                                                    Valor:
+                                                    <strong>€ {{evento.valor}}</strong>
+                                                </p>
+                                            {% endif %}
+                                        {% else %}
+                                            <p>
+                                                <i class="fa-solid fa-money-bill"></i>
+                                                Valor:
+                                                <strong>€ {{evento.valor}}</strong>
+                                            </p>
+                                        {% endif %}
+                                    {% else %}
+                                        <p>
+                                            <i class="fa-solid fa-money-bill"></i>
+                                            Valor:
+                                            <strong>
+                                                Gratuito
+                                            </strong>
+                                        </p>
+                                    {% endif %}
+
+                                    {% if not evento.presenca_crianca or evento.divisao_genero == 'metade' %}
+                                        <section>
+                                            <img src="{% static 'images/block.png' %}" alt="FINDB - Evento - {{evento.nome}}">
+                                            Esse evento NÃO permite crianças.
+                                        </section>
+                                    {% else %}
+                                        <section>
+                                            <img src="{% static 'images/ok.png' %}" alt="FINDB - Evento - {{evento.nome}}">
+                                            Esse evento permite crianças. As que tiverem até 
+                                            {{evento.idade_crianca|format_ano}}, NÃO pagam.
+                                        </section>
+                                        <p>
+                                            <i class="fa-solid fa-money-bill"></i>
+                                            Valor Criança (mais de {{evento.idade_crianca|format_ano}}):
+                                            <strong>
+                                                € {{evento.valor_crianca}}
+                                            </strong>
+                                        </p>
+                                    {% endif %}
+                                    <p>
+                                        <i class="fa-regular fa-calendar-days"></i>
+                                        Data e Horário de Início:
+                                        <strong>
+                                            {{evento.data}}
+                                        </strong>
+                                    </p>
+                                    <p>
+                                        <i class="fa-regular fa-calendar-days"></i>
+                                        Data e Horário de Término:
+                                        <strong>
+                                            {{evento.data_termino}}
+                                        </strong>
+                                    </p>
+
+                                    {% if evento.itens_exclusos %}
+                                        <p>
+                                            <i class="fa-solid fa-circle-xmark"></i>
+                                            Itens Exclusos:
+                                            {% for item_excluso in evento.itens_exclusos.all %}
+                                                <strong>
+                                                    {{item_excluso}}
+                                                </strong>
+                                            {% endfor %}
+                                        </p>
+                                    {% endif %}
+
+                                    {% if evento.contato1 %}
+                                        <p>
+                                            <i class="fa-solid fa-address-book"></i>
+                                            Contato 1:
+                                            <strong>
+                                                {{evento.contato1}}
+                                            </strong>
+                                        </p>
+                                    {% endif %}
+
+                                    {% if evento.contato2 %}
+                                        <p>
+                                            <i class="fa-solid fa-address-book"></i>
+                                            Contato 2:
+                                            <strong>
+                                                {{evento.contato2}}
+                                            </strong>
+                                        </p>
+                                    {% endif %}
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="descricao">
+                            <h3>
+                                <i class="fa-solid fa-circle-info"></i>
+                                Descrição:
+                            </h3>
+                            <p>
+                                {{evento.descricao}}
+                            </p>
+                        </div>
+
+                        {% if evento.info_guia_turistico %}
+                            <div class="perguntas">
+                                <h3>
+                                    <i class="fa-solid fa-question"></i>
+                                    Perguntas Frequentes:
+                                </h3>
+
+                                {% for pergunta in evento.pergunta.all %}
+                                    <div class="pergunta">
+                                        <h3 class="titulo4">
+                                            {{pergunta.nome}}
+                                            <i class="fa-solid fa-plus"></i>
+                                            <i class="fa-solid fa-minus"></i>
+                                        </h3>
+                                        <p>
+                                            {{pergunta.texto}}
+                                        </p>
+                                    </div>
+                                {% endfor %}
+
+                            </div>
+                        {% endif %}
+
+                        {% if evento.info_guia_turistico %}
+                            <div class="descricao">
+                                <h3>
+                                    <i class="fa-solid fa-plane-departure"></i>
+                                    Informações do Guia Turístico
+                                </h3>
+                                <p>
+                                    {{evento.info_guia_turistico}}
+                                </p>
+                            </div>
+                        {% endif %}
+                        {% if evento.mensagem_motivo %}
+                            <div class="descricao">
+                                <h3>
+                                    <i class="fa-solid fa-circle-info"></i>
+                                    Por que você deve ir para o evento?
+                                </h3>
+                                <p>
+                                    {{evento.mensagem_motivo}}
+                                </p>
+                            </div>
+                        {% endif %}
+                        {% if evento.mensagem_administrador %}
+                            <div class="descricao">
+                                <h3>
+                                    <i class="fa-solid fa-circle-info"></i>
+                                    Nota do Administrador:
+                                </h3>
+                                <p>
+                                    {{evento.mensagem_administrador}}
+                                </p>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="coluna2">
+                        {% if evento.foto %}
+                            <a href="{% url 'evento' evento.slug %}"> 
+                                <img src="{{evento.foto.url}}" alt="{{evento.nome}} - FINDB">               
+                            </a>
+                        {% elif evento.tipo == 'Presencial' %}
+                            <a href="{% url 'evento' evento.slug %}"> 
+                                <img src="{% static 'images/evento_sem_foto_presencial.jpg' %}" alt="{{evento.nome}} - FINDB">
+                            </a>
+                        {% else %}
+                            <a href="{% url 'evento' evento.slug %}"> 
+                                <img src="{% static 'images/evento_sem_foto_online.jpg' %}" alt="{{evento.nome}} - FINDB">
+                            </a>
+                        {% endif %}
+                        <h1>
+                            {{evento.nome}}
+                        </h1>
+                        <h2>
+                            {% if evento.pagamento != 'Gratuito' %}
+                                {% if evento.divisao_genero == 'metade' %}
+                                    <p>
+                                        Valor Homem:
+                                        <strong>€ {{evento.valor_homem}}</strong>
+                                    </p>
+                                    <p>
+                                        Valor Mulher:
+                                        <strong> € {{evento.valor_mulher}} </strong>
+                                    </p>
+                                {% elif evento.divisao_genero == 'nenhum' %}
+                                    {% if evento.valor == 0 %}
+                                        <p>
+                                            Valor Homem:
+                                            <strong>€ {{evento.valor_homem}}</strong>
+                                        </p>
+                                        <p>
+                                            Valor Mulher:
+                                            <strong> € {{evento.valor_mulher}} </strong>
+                                        </p>
+                                    {% else %}
+                                        <p>
+                                            Valor Adulto:
+                                            <strong>€ {{evento.valor}}</strong>
+                                        </p>
+                                    {% endif %}
+                                    {% if evento.qtd_participantes > 1 and evento.presenca_crianca %}
+                                        <p>
+                                            Valor Criança:
+                                            <strong> € {{evento.valor_crianca}} </strong>
+                                        </p>
+                                    {% endif %}
+                                {% else %}
+                                    <p>
+                                        Valor:
+                                        <strong>€ {{evento.valor}}</strong>
+                                    </p>
+                                    {% if evento.qtd_participantes > 1 and evento.presenca_crianca %}
+                                        <p>
+                                            Valor Criança:
+                                            <strong> € {{evento.valor_crianca}} </strong>
+                                        </p>
+                                    {% endif %}
+                                {% endif %}
+                            {% else %}
+                                Gratuito
+                            {% endif %}
+                            
+                            <p>
+                                {{evento.tipo}}
+                            </p>
+                        </h2>
+
+                        <div class="botoes">
+                            {% if evento.tipo == 'Presencial' %}
+                                {% if evento.link_localizacao %}
+                                    <a href="{{evento.link_localizacao}}" target="_blank">
+                                        <i class="fa-solid fa-location-dot"></i>
+                                        Localização do Evento
+                                    </a>
+                                {% endif %}
+                                {% if evento.link_localizacao_inicio %}
+                                    <a href="{{evento.link_localizacao_inicio}}" target="_blank">
+                                        <i class="fa-solid fa-location-dot"></i>
+                                        Localização de Partida
+                                    </a>
+                                {% endif %}
+                            {% elif evento.tipo == 'Online' and participacao_evento and evento.link_reuniao %}
+                                <p>
+                                    Link reunião:
+                                    <strong>
+                                        {{evento.link_reuniao}}
+                                    </strong>
+                                </p>
+                            {% endif %}
+                            {% if participacao_evento and participacao_evento.img_qrcode %}
+                                <a href="{{participacao.img_qrcode.url}}" style="background: black;" target="_blank">
+                                    <i class="fa-solid fa-qrcode"></i>
+                                    Baixar qrcode
+                                </a>
+                            {% endif %}
+                            {% if participacao_evento and participacao_evento.bilhete %}
+                                <a href="{{participacao.bilhete.url}}" style="background: black;" target="_blank">
+                                    <i class="fa-solid fa-envelope"></i>
+                                    Baixar bilhete
+                                </a>
+                            {% endif %}
+                        </div>
+                        {% if not participacao_evento %}
+                            {% if not finalizado and not cheio %}
+                                {% if meu_pedido_anual.evento_gratis == 'sim' and meu_pedido_anual.qtd_eventos_gratis == 1 %}
+                                    <p class="info">
+                                        Esse evento é pago, mas você tem direito a 1 evento grátis.
+                                    </p>
+                                    <button type="submit" class="confirmar-evento">
+                                        <i class="fa-solid fa-hand-holding-dollar"></i>
+                                        Confirmar gratuitamente
+                                    </button>
+                                {% elif evento.pagamento != 'Gratuito' %}
+                                    <button type="submit" class="confirmar-evento">
+                                        <i class="fa-solid fa-hand-holding-dollar"></i>
+                                        Pagar
+                                    </button>
+                                {% else %}
+                                    <button type="submit" class="confirmar-evento">
+                                        <i class="fa-solid fa-thumbs-up"></i>
+                                        Marcar presença
+                                    </button>
+                                {% endif %}
+                            {% else %}
+                                <small style="font-size: 1.5rem; color: red; font-weight: bold; text-align: justify;">
+                                    Esse evento já foi finalizado ou está esgotado
+                                </small>
+                            {% endif %}
+                        {% endif %}
+                        
+                        <span class="loader-confirmar-evento"></span>
+                        
+                        {% if evento.qtd_participantes > 1 and evento.presenca_crianca and evento.divisao_genero != 'metade' %}
+                            <label for="input-crianca">
+                                Esse evento <strong>permite crianças</strong>. Você quer comprar ingresso pra quantas crianças?
+                                <strong>Se não quiser, deixe como 0.</strong>
+                            </label>
+                            <!--<small style="color: red; font-weight: bold; text-align: justify;">
+                                OBS: As crianças que tiverem até 
+                                {{evento.idade_crianca|format_ano}}, NÃO pagam.
+                            </small>-->
+                            <input type="number" name="qtd-criancas" id="input-crianca" min="0" max="{{qtd_maxima_criancas}}" value="0">
+                        {% endif %}
+                    </div>
+
+                </form>
+
+                
+                {% if page_obj %}
+                    <h2>
+                        Participantes Confirmados desse Evento ({{qtd}})
+                    </h2>
+                    <div class="participantes">
+                        {% for participante in page_obj %}
+                            <div class="participante">
+                                <a href="{% url 'perfil' participante.remetente.slug %}">
+                                    {% if participante.remetente.foto %}
+                                        <img src="{{participante.remetente.foto.url}}" alt="{{participante.remetente.nome}} - FINDB">
+                                    {% else %}
+                                        <img src="{% static 'images/foto_user.png' %}" alt="{{participante.remetente.nome}} - FINDB">
+                                    {% endif %}
+                                </a>
+                                <h3>
+                                    {{participante.remetente.nome}} {{participante.remetente.idade}}
+                                </h3>
+                                <h4>
+                                    {{participante.remetente.pais}}
+                                </h4>
+                                <p>
+                                    {{participante.remetente.genero}}
+                                </p>
+
+                                {% if participante.remetente.slug != request.session.get_perfil_slug %}
+                                    {% if participante.remetente.interesse != 'Eventos' and participante.remetente.interesse != 'Terapias diversas' and participante.remetente.interesse != 'Profissionais em relacionamento' %}
+                                        <a href="" class="convidar-video">
+                                            <i class="fa-solid fa-camera"></i>
+                                            Chamada de vídeo
+                                        </a>
+                                    {% endif %}
+                                    <strong style="margin: 1rem 0;">
+                                        {{participante.remetente.interesse}}
+                                    </strong>
+
+                                    {% if participante.remetente.interesse != 'Eventos' and participante.remetente.interesse != 'Terapias diversas' and participante.remetente.interesse != 'Profissionais em relacionamento' %}
+                                        <div class="box-chamada-video">
+                                            <div class="box-convidar-video">
+                                                <h2>
+                                                    Vídeo chamada
+                                                </h2>
+                                                <i class="fa-solid fa-xmark"></i>
+                                                <div class="box-info">
+                                                    {% if participante.remetente.foto %}
+                                                        <img src="{{participante.remetente.foto.url}}" alt="{{participante.remetente.nome}} - FINDB">
+                                                    {% else %}
+                                                        <img src="{% static 'images/foto_user.png' %}" alt="{{participante.remetente.nome}} - FINDB">
+                                                    {% endif %}
+                                                    <h3>
+                                                        {{participante.remetente.nome}}
+                                                    </h3>
+                                                </div>
+                                                <form action="{% url 'convite_chamada_video' %}" class="form-participante-chamada-video" method="POST">
+                                                    {% csrf_token %}
+                                                    <label for="hora">
+                                                        Escolha uma data e horário:
+                                                    </label>
+                                                    <input type="hidden" name="slug_destinatario" value="{{participante.remetente.slug}}">
+                                                    <input type="datetime-local" name="hora" id="hora" min="{{data_formatada_amanha}}" required>
+                                                    <textarea name="mensagem" id="mensagem" rows="5" cols="3"
+                                                    placeholder="Digite sua mensagem aqui... Máximo de 2000 caracteres" maxlength="2000"></textarea>
+                                                    <span class="loader-participante-chamada-video"></span>
+                                                    <input type="submit" class="submit-form-participante-chamada-video" value="Enviar convite">
+                                                </form>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% else %}
+                                    <a href="{% url 'perfil' participante.remetente.slug %}">
+                                        <i class="fa-solid fa-user"></i>
+                                        Meu perfil
+                                    </a>
+                                    <strong style="margin: 1rem 0;">
+                                        {{participante.remetente.interesse}}
+                                    </strong>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    {% include 'parciais/_pagination_evento.html' %}
+                {% else %}
+                    <h2>
+                        Esse evento ainda não tem participantes confirmados
+                    </h2>
+                {% endif %}
+            {% else %}
+                <h1>
+                    Esse evento não existe.
+                </h1>
+            {% endif %}
+        </div>
+    </main>
+
+{% endblock %}
+{% block scripts %}
+    <script src="{% static 'js/evento.js' %}"></script>
+{% endblock %}
+
