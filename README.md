@@ -12,6 +12,7 @@
 - Cadastro de Eventos Presenciais e Remotos
 - Sistema de Video Chamada e Reuniões com ZOOM e ZegoCloud
 - Sistema de assinatura com STRIPE
+- Armazenamento de Arquivos - CloudFare
 - Área Administrativa
 
 
