@@ -36,5 +36,10 @@ urlpatterns = [
     # path('teste/', views.teste, name='teste'),
     # path('teste_sucesso/', views.teste_sucesso, name='teste_sucesso'),
 
-    path('criar_perfis_fakes/', views.criar_perfis_fakes, name='criar_perfis_fakes'),
+    # path('criar_perfis_fakes/', views.criar_perfis_fakes, name='criar_perfis_fakes'),
+
+
+    path('chat/<str:slug>/', views.chat, name='chat'),
+    path('chat_receber_mensagem/<str:slug>/', views.chat_receber_mensagem, name='chat_receber_mensagem'),
+    path('chat_enviar_mensagem/<str:slug>/', views.chat_enviar_mensagem, name='chat_enviar_mensagem'),
 ]

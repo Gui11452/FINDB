@@ -345,6 +345,11 @@
                                             Convidar para evento
                                         </a>
                                     {% endif %}-->
+                                    <a href="{% url 'chat' perfil.slug %}" style="width: 100%; text-align: center; background: black;" class="convidar-evento">
+                                        <i class="fa-solid fa-comment-dots"></i>
+                                        Chat
+                                    </a>
+                                    
                                     <a href="{% url 'convidar_evento' perfil.slug %}" class="convidar-evento">
                                         <i class="fa-solid fa-location-dot"></i>
                                         Convidar para evento

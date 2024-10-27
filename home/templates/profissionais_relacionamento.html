@@ -19,49 +19,47 @@
                 <div class="profissionais">
                     {% for profissional in page_obj %}
                         <div class="profissional">
-                            {% if profissional.profilePhoto %}
-                                <a href="https://m42api.m-21.tech/{{profissional.profilePhoto}}">  
-                                    <img src="https://m42api.m-21.tech/{{profissional.profilePhoto}}" alt="{{profissional.name}} - FINDB">               
+                            {% if profissional.bucket_name_foto and profissional.object_name_foto %}
+                                <a href="https://pub-a82751e5df824f8196cb1b5716f3484f.r2.dev/{perfil.object_name_foto}">  
+                                    <img src="https://pub-a82751e5df824f8196cb1b5716f3484f.r2.dev/{perfil.object_name_foto}" alt="{{profissional.nome}} - FINDB">               
                                 </a>
                             {% else %}
-                                <img src="{% static 'images/foto_user.png' %}" alt="{{profissional.name}} - FINDB">
+                                <img src="{% static 'images/foto_user.png' %}" alt="{{profissional.nome}} - FINDB">
                             {% endif %}
                             <h3>
-                                {{profissional.name}}
+                                {{profissional.nome}}
                             </h3>
                             <h4>
-                                € {{profissional.consultationFee}}
+                                € {{profissional.preco}}
                             </h4>
                             <p>
                                 <strong>
-                                    Tipo de consulta:
+                                    Atendimento:
                                 </strong>
-                                {% if profissional.consultationType == 'presential' %}
-                                    Presencial
+                                {% if profissional.atendimento == 'Ambos' %}
+                                    Presencial e Online
                                 {% else %}
-                                    Online
+                                    {{profissional.atendimento}}
                                 {% endif %}
                             </p>
                             <p>
                                 <strong>
                                     Qualificação:
                                 </strong>
-                                {{profissional.qualification}}
-                            </p>
-                            <p>
-                                <strong>
-                                    Experiência:
-                                </strong>
-                                {{profissional.experience}}
+                                {{profissional.categoria}}
                             </p>
     
                             <div class="botoes">
-                                <a href="{% url 'profissional' profissional.uid %}">
-                                    Ver mais
-                                </a>
-                                <a href="{{profissional.website}}">
-                                    Marcar consulta
-                                </a>
+                                {% if profissional.slug %}
+                                    <a href="{% url 'profissional' profissional.slug %}">
+                                        Ver mais
+                                    </a>
+                                {% endif %}
+                                {% if profissional.link %}
+                                    <a href="{{profissional.link}}">
+                                        Marcar consulta
+                                    </a>
+                                {% endif %}
                             </div>
                             
                         </div>

@@ -16,7 +16,7 @@
                     <div class="coluna1">
                         {% if profissional.video %}
                             <video controls>
-                                <source src="https://m42api.m-21.tech/{{profissional.video}}" type="video/mp4">
+                                <source src="https://pub-56927102316e484fa7eb2ab48f073846.r2.dev/{{profissional.object_name_video}}">
                                 Seu navegador não suporta a tag de vídeo.
                             </video>
                         {% endif %}
@@ -62,83 +62,46 @@
                             <div>
                                 <div>
                                     <p>
-                                        <i class="fa-solid fa-comment-dots"></i>
-                                        Idioma da sessão: 
+                                        <i class="fa-solid fa-globe"></i>
+                                        Região: 
                                         <strong>
-                                            {% for lingua in profissional.languages %}
-                                                <span>
-                                                    {{lingua}}
-                                                </span>
-                                            {% endfor %}
+                                            {{profissional.regiao}}
                                         </strong>
                                     </p>
-                                    <p>
-                                        <i class="fa-solid fa-medal"></i>
-                                        Tipos de especialidade:
-                                        <strong>
-                                            {% for tipo in profissional.specialistTypes %}
-                                                <span>
-                                                    {{tipo}}
-                                                </span>
-                                            {% endfor %}
-                                        </strong>
-                                    </p>
-    
-                                    <p>
-                                        <i class="fa-solid fa-comment-dots"></i>
-                                        Áreas de experiência: 
-                                        <strong>
-                                            {% for area in profissional.areasOfExpertise %}
-                                                <span>
-                                                    {{area}}
-                                                </span>
-                                            {% endfor %}
-                                        </strong>
-                                    </p> 
 
                                     <p>
-                                        <i class="fa-solid fa-comment-dots"></i>
-                                        Rede social: 
+                                        <i class="fa-solid fa-globe"></i>
+                                        Nacionalidade: 
                                         <strong>
-                                            {{profissional.socialMedia}}
+                                            {{profissional.nacionalidade}}
                                         </strong>
-                                    </p>  
+                                    </p>
+
+                                    <p>
+                                        <i class="fa-solid fa-globe"></i>
+                                        País: 
+                                        <strong>
+                                            {{profissional.pais}}
+                                        </strong>
+                                    </p>
+
+                                    {% if profissional.endereco %}
+                                        <p>
+                                            <i class="fa-solid fa-location-dot"></i>
+                                            Endereço: 
+                                            <strong>
+                                                {{profissional.endereco}}
+                                            </strong>
+                                        </p>
+                                    {% endif %}
                                 </div>
                                 
                                 <div>
                                     <p>
-                                        <i class="fa-solid fa-clipboard"></i>
+                                        <i class="fa-solid fa-medal"></i>
                                         Qualificação:
                                         <strong>
-                                            {{profissional.qualification}}
-                                        </strong>
-                                    </p>
-                                    <p>
-                                        <i class="fa-solid fa-pen"></i>
-                                        Experiência:
-                                        <strong>
-                                            {{profissional.experience}}
-                                        </strong>
-                                    </p>
-                                    <p>
-                                        <i class="fa-solid fa-location-dot"></i>
-                                        Endereço:
-                                        <strong>
-                                            {{profissional.address}}
-                                        </strong>
-                                    </p>
-                                    <p>
-                                        <i class="fa-solid fa-phone"></i>
-                                        Contato:
-                                        <strong>
-                                            {{profissional.contact}}
-                                        </strong>
-                                    </p>
-                                    <p>
-                                        <i class="fa-solid fa-comment-dots"></i>
-                                        Qualificação:
-                                        <strong>
-                                            {{profissional.qualification}}
+                                            {{profissional.categoria}}
                                         </strong>
                                     </p>
     
@@ -146,9 +109,25 @@
                                         <i class="fa-solid fa-envelope"></i>
                                         E-mail:
                                         <strong>
-                                            {{profissional.email}}
+                                            {{profissional.usuario.email}}
                                         </strong>
                                     </p>
+
+                                    <p>
+                                        <i class="fa-solid fa-user"></i>
+                                        Gênero: 
+                                        <strong>
+                                            {{profissional.genero}}
+                                        </strong>
+                                    </p>
+
+                                    <p>
+                                        <i class="fa-solid fa-address-book"></i>
+                                        Rede social: 
+                                        <strong>
+                                            {{profissional.redes_sociais}}
+                                        </strong>
+                                    </p>  
                                 </div>
                             </div>
                         </div>
@@ -159,25 +138,26 @@
                                 Descrição:
                             </h3>
                             <p>
-                                {{profissional.description}}
+                                {{profissional.descricao}}
                             </p>
                         </div>
+
                     </div>
                     <div class="coluna2">
-                        {% if profissional.profilePhoto %}
-                            <a href="https://m42api.m-21.tech/{{profissional.profilePhoto}}">  
-                                <img src="https://m42api.m-21.tech/{{profissional.profilePhoto}}" alt="{{profissional.name}} - FINDB">               
+                        {% if profissional.bucket_name_foto and profissional.object_name_foto %}
+                            <a href="https://pub-a82751e5df824f8196cb1b5716f3484f.r2.dev/{perfil.object_name_foto}">  
+                                <img src="https://pub-a82751e5df824f8196cb1b5716f3484f.r2.dev/{perfil.object_name_foto}" alt="{{profissional.nome}} - FINDB">               
                             </a>
                         {% else %}
-                            <img src="{% static 'images/foto_user.png' %}" alt="{{profissional.name}} - FINDB">
+                            <img src="{% static 'images/foto_user.png' %}" alt="{{profissional.nome}} - FINDB">
                         {% endif %}
                         <h1>
-                            {{profissional.name}}
+                            {{profissional.nome}}
                         </h1>
                         <h2>
-                            € {{profissional.consultationFee}} / {{profissional.consultationType}}
+                            € {{profissional.preco}} / {{profissional.atendimento}}
                         </h2>
-                        <a href="{{profissional.website}}" class="btn">
+                        <a href="{{profissional.link}}" class="btn">
                             Marcar consulta
                         </a>
                     </div>

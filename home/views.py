@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_list_or_404
 from perfil.models import Perfil, Cupido
 from .models import Carrossel
 from django.db.models import Q
+from django.http import JsonResponse
 import random
 from namoro.settings import DOMINIO
 from eventos.views import get_perfil_notificacoes
@@ -221,7 +222,7 @@ def cupidos(request):
 
 
 def profissionais_relacionamento(request):
-    """if not request.user.is_authenticated:
+    if not request.user.is_authenticated:
         messages.error(request, f'Você precisa estar online para acessar essa área')
         return redirect('home')
 
@@ -241,23 +242,24 @@ def profissionais_relacionamento(request):
     if todas_notificacoes == 'redirect':
         return redirect('login')
 
-    response = requests.get('https://m42api.m-21.tech/api/therapists').json()
-    response = list(response)
-
-    qtd = len(response) if response else 0
-    paginator = Paginator(response, 10)
-    page = request.GET.get('p', 1)
-    page_obj = paginator.get_page(page)
+    response = requests.get('https://findbtherapy.com/get_profissionais/').json()
+    if isinstance(response, list):   
+        qtd = len(response) if response else 0
+        paginator = Paginator(response, 10)
+        page = request.GET.get('p', 1)
+        page_obj = paginator.get_page(page)
+    else:
+        qtd = 0
+        page_obj = None
 
     return render(request, 'profissionais_relacionamento.html', {
         'page_obj': page_obj,
         'qtd': qtd,
-        # 'todas_notificacoes': todas_notificacoes,
-    })"""
-    return redirect('home')
+        'todas_notificacoes': todas_notificacoes,
+    })
 
 
-def profissional(request, uid):
+def profissional(request, slug):
     if not request.user.is_authenticated:
         messages.error(request, f'Você precisa estar online para acessar essa área')
         return redirect('home')
@@ -278,16 +280,12 @@ def profissional(request, uid):
     if todas_notificacoes == 'redirect':
         return redirect('login')
 
-    response = requests.get('https://m42api.m-21.tech/api/therapists').json()
-    response = list(response)
-
-    terapeuta = None
-    for r in response:
-        if r.get('uid') == uid:
-            terapeuta = r
-            break
+    response = requests.get(f'https://findbtherapy.com/get_profissional/{slug}/').json()
+    
+    if response.get('error'):
+        return redirect('profissionais_relacionamento')
 
     return render(request, 'profissional.html', {
-        'profissional': terapeuta,
+        'profissional': response,
         'todas_notificacoes': todas_notificacoes,
     })

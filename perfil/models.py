@@ -265,56 +265,165 @@ class Perfil(models.Model):
         max_length=255, 
         verbose_name="País", 
         choices=[
+            ("Afeganistão", "Afeganistão"),
+            ("África do Sul", "África do Sul"),
+            ("Albânia", "Albânia"),
             ("Alemanha", "Alemanha"),
+            ("Andorra", "Andorra"),
+            ("Angola", "Angola"),
+            ("Antígua e Barbuda", "Antígua e Barbuda"),
+            ("Arábia Saudita", "Arábia Saudita"),
+            ("Argélia", "Argélia"),
+            ("Argentina", "Argentina"),
+            ("Armênia", "Armênia"),
+            ("Austrália", "Austrália"),
             ("Áustria", "Áustria"),
+            ("Azerbaijão", "Azerbaijão"),
+            ("Bahamas", "Bahamas"),
+            ("Bangladesh", "Bangladesh"),
+            ("Barbados", "Barbados"),
+            ("Bahrein", "Bahrein"),
+            ("Belarus", "Belarus"),
             ("Bélgica", "Bélgica"),
+            ("Belize", "Belize"),
+            ("Benim", "Benim"),
+            ("Butão", "Butão"),
+            ("Bolívia", "Bolívia"),
+            ("Bósnia e Herzegovina", "Bósnia e Herzegovina"),
+            ("Botsuana", "Botsuana"),
+            ("Brasil", "Brasil"),
+            ("Brunei", "Brunei"),
             ("Bulgária", "Bulgária"),
+            ("Burkina Faso", "Burkina Faso"),
+            ("Burundi", "Burundi"),
+            ("Cabo Verde", "Cabo Verde"),
+            ("Camarões", "Camarões"),
+            ("Camboja", "Camboja"),
+            ("Canadá", "Canadá"),
+            ("Catar", "Catar"),
+            ("Cazaquistão", "Cazaquistão"),
+            ("Chade", "Chade"),
+            ("Chile", "Chile"),
+            ("China", "China"),
             ("Chipre", "Chipre"),
+            ("Colômbia", "Colômbia"),
+            ("Comores", "Comores"),
+            ("Congo", "Congo"),
+            ("Coreia do Norte", "Coreia do Norte"),
+            ("Coreia do Sul", "Coreia do Sul"),
+            ("Costa do Marfim", "Costa do Marfim"),
+            ("Costa Rica", "Costa Rica"),
             ("Croácia", "Croácia"),
+            ("Cuba", "Cuba"),
             ("Dinamarca", "Dinamarca"),
+            ("Djibouti", "Djibouti"),
+            ("Dominica", "Dominica"),
+            ("Egito", "Egito"),
+            ("El Salvador", "El Salvador"),
+            ("Emirados Árabes Unidos", "Emirados Árabes Unidos"),
+            ("Equador", "Equador"),
+            ("Eritreia", "Eritreia"),
             ("Eslováquia", "Eslováquia"),
             ("Eslovênia", "Eslovênia"),
             ("Espanha", "Espanha"),
+            ("Estados Unidos", "Estados Unidos"),
             ("Estônia", "Estônia"),
+            ("Eswatini", "Eswatini"),
+            ("Etiópia", "Etiópia"),
+            ("Fiji", "Fiji"),
+            ("Filipinas", "Filipinas"),
             ("Finlândia", "Finlândia"),
             ("França", "França"),
+            ("Gabão", "Gabão"),
+            ("Gâmbia", "Gâmbia"),
+            ("Gana", "Gana"),
+            ("Geórgia", "Geórgia"),
+            ("Granada", "Granada"),
             ("Grécia", "Grécia"),
+            ("Guatemala", "Guatemala"),
+            ("Guiné", "Guiné"),
+            ("Guiné-Bissau", "Guiné-Bissau"),
+            ("Guiné Equatorial", "Guiné Equatorial"),
+            ("Haiti", "Haiti"),
+            ("Honduras", "Honduras"),
             ("Hungria", "Hungria"),
+            ("Iêmen", "Iêmen"),
+            ("Ilhas Maldivas", "Ilhas Maldivas"),
+            ("Índia", "Índia"),
+            ("Indonésia", "Indonésia"),
+            ("Irã", "Irã"),
+            ("Iraque", "Iraque"),
             ("Irlanda", "Irlanda"),
+            ("Islândia", "Islândia"),
+            ("Israel", "Israel"),
             ("Itália", "Itália"),
+            ("Jamaica", "Jamaica"),
+            ("Japão", "Japão"),
+            ("Jordânia", "Jordânia"),
+            ("Kosovo", "Kosovo"),
+            ("Kuwait", "Kuwait"),
+            ("Laos", "Laos"),
+            ("Lesoto", "Lesoto"),
             ("Letônia", "Letônia"),
+            ("Líbano", "Líbano"),
+            ("Libéria", "Libéria"),
+            ("Líbia", "Líbia"),
+            ("Liechtenstein", "Liechtenstein"),
             ("Lituânia", "Lituânia"),
             ("Luxemburgo", "Luxemburgo"),
+            ("Macedônia do Norte", "Macedônia do Norte"),
+            ("Madagascar", "Madagascar"),
+            ("Malásia", "Malásia"),
             ("Malta", "Malta"),
-            ("Países Baixos", "Países Baixos"),
+            ("Marrocos", "Marrocos"),
+            ("México", "México"),
+            ("Mônaco", "Mônaco"),
+            ("Mongólia", "Mongólia"),
+            ("Moçambique", "Moçambique"),
+            ("Namíbia", "Namíbia"),
+            ("Nepal", "Nepal"),
+            ("Nicarágua", "Nicarágua"),
+            ("Nigéria", "Nigéria"),
+            ("Noruega", "Noruega"),
+            ("Nova Zelândia", "Nova Zelândia"),
+            ("Omã", "Omã"),
+            ("Paquistão", "Paquistão"),
+            ("Paraguai", "Paraguai"),
+            ("Peru", "Peru"),
             ("Polônia", "Polônia"),
             ("Portugal", "Portugal"),
+            ("Quênia", "Quênia"),
+            ("Reino Unido", "Reino Unido"),
+            ("República Centro-Africana", "República Centro-Africana"),
+            ("República Democrática do Congo", "República Democrática do Congo"),
+            ("República Dominicana", "República Dominicana"),
             ("Romênia", "Romênia"),
-            ("Suécia", "Suécia"),
-            ("Albânia", "Albânia"),
-            ("Andorra", "Andorra"),
-            ("Armênia", "Armênia"),
-            ("Azerbaijão", "Azerbaijão"),
-            ("Bielorrússia", "Bielorrússia"),
-            ("Bósnia e Herzegovina", "Bósnia e Herzegovina"),
-            ("Cazaquistão", "Cazaquistão"),
-            ("Geórgia", "Geórgia"),
-            ("Islândia", "Islândia"),
-            ("Kosovo", "Kosovo"),
-            ("Liechtenstein", "Liechtenstein"),
-            ("Moldávia", "Moldávia"),
-            ("Mônaco", "Mônaco"),
-            ("Montenegro", "Montenegro"),
-            ("Macedônia do Norte", "Macedônia do Norte"),
-            ("Noruega", "Noruega"),
             ("Rússia", "Rússia"),
-            ("San Marino", "San Marino"),
+            ("São Tomé e Príncipe", "São Tomé e Príncipe"),
+            ("Senegal", "Senegal"),
             ("Sérvia", "Sérvia"),
+            ("Singapura", "Singapura"),
+            ("Síria", "Síria"),
+            ("Somália", "Somália"),
+            ("Sri Lanka", "Sri Lanka"),
+            ("Suécia", "Suécia"),
             ("Suíça", "Suíça"),
+            ("Suriname", "Suriname"),
+            ("Tailândia", "Tailândia"),
+            ("Tanzânia", "Tanzânia"),
+            ("Togo", "Togo"),
+            ("Trinidad e Tobago", "Trinidad e Tobago"),
+            ("Tunísia", "Tunísia"),
             ("Turquia", "Turquia"),
             ("Ucrânia", "Ucrânia"),
-            ("Reino Unido", "Reino Unido"),
+            ("Uganda", "Uganda"),
+            ("Uruguai", "Uruguai"),
+            ("Uzbequistão", "Uzbequistão"),
             ("Vaticano", "Vaticano"),
+            ("Venezuela", "Venezuela"),
+            ("Vietnã", "Vietnã"),
+            ("Zâmbia", "Zâmbia"),
+            ("Zimbábue", "Zimbábue"),
         ],
     )
 
@@ -477,6 +586,7 @@ class Perfil(models.Model):
     descricao = models.TextField(max_length=10000, verbose_name="Descrição")
 
     foto = models.ImageField(blank=True, null=True, upload_to='fotos/%Y/%m/%d', verbose_name="Foto")
+    video = models.FileField(blank=True, null=True, upload_to='videos/%Y/%m/%d', verbose_name="Videos")
 
     verificacao_email = models.BooleanField(default=False, verbose_name='Verificação E-mail')
     codigo = models.CharField(max_length=255, default='', verbose_name='Código')
@@ -580,3 +690,40 @@ class VideoChamada(models.Model):
 
     def __str__(self):
         return f'{self.remetente} -> {self.destinatario}'
+    
+
+
+class MensagemChat(models.Model):
+    remetente = models.ForeignKey(Perfil, on_delete=models.CASCADE, related_name='chat_remetente', verbose_name='Remetente')
+    destinatario = models.ForeignKey(Perfil, on_delete=models.CASCADE, related_name='chat_destinatario', verbose_name='Destinatário')
+
+    data = models.DateTimeField(default=timezone.now, verbose_name='Data')
+    mensagem = models.TextField(default='', verbose_name='Mensagem')
+
+    recebida = models.BooleanField(default=False, verbose_name='Recebida?')
+
+    codigo = models.CharField(max_length=255, default='', verbose_name='Código')
+
+    def save(self, *args, **kwargs):
+        if not self.codigo:
+            # Gerando Código - Início
+            letras = string.ascii_letters
+            digitos = string.digits
+            geral = letras + digitos
+            while True:
+                codigo = ''.join(random.choices(geral, k=25))
+                if not MensagemChat.objects.filter(codigo=codigo).exists():
+                    break
+            # Gerando Código - Fim
+            self.codigo = codigo
+
+        return super().save(*args, **kwargs)
+
+    class Meta:
+        verbose_name = 'Mensagem Chat'
+        verbose_name_plural = 'Mensagens Chat'
+
+    def __str__(self):
+        return self.codigo
+
+

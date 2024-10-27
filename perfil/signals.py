@@ -50,10 +50,13 @@ def delete_album_fotos(sender, instance, *args, **kwargs):
 
 
 @receiver(pre_delete, sender=Perfil)
-def delete_foto_perfil(sender, instance, *args, **kwargs):
+def delete_foto_video_perfil(sender, instance, *args, **kwargs):
     old_instance = Perfil.objects.get(id=instance.id)
 
     if old_instance.foto:
         os.remove(old_instance.foto.path)
+
+    if old_instance.video:
+        os.remove(old_instance.video.path)
 
     

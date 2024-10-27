@@ -1,0 +1,236 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap'); */
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    outline: 0;
+    box-sizing: border-box;
+    list-style: none;
+    border-collapse: collapse;
+    text-decoration: none;
+}
+
+html{
+    font-size: 62.5%;
+}
+
+body{
+    font-size: 1.5rem;
+    width: 100%;
+    font-family: var(--fonte-paragrafos);
+    background: var(--cor-branco);
+}
+
+h1, h2, h3, h4, h5, h6{
+    font-family: var(--fonte-titulos) !important;
+}
+
+:root{
+    --cor-principal: #9152d9;
+    --cor-principal-linear: linear-gradient(221.26deg, #c548ab -3.4%, #635bff 101%);
+    --cor-secundaria: #d8385e;
+    --cor-preto: black;
+    --cor-branco: #fff;
+    --cor-cinza: #343746;
+    /* --fonte-titulos: 'Poppins', sans-serif; */
+    --fonte-titulos: "Manrope", sans-serif;
+    --fonte-paragrafos: 'Montserrat', sans-serif;
+}
+
+.sucesso, .erro, .info{
+    border-radius: 1rem;
+    padding: 1rem 2rem;
+    font-weight: bold;
+    width: 100%;
+    text-align: center;
+}
+
+.sucesso{
+    color: var(--cor-preto);
+    background: #2ff15d;
+}
+
+.erro{
+    color: var(--cor-branco);
+    background: #e71717;
+}
+
+.info{
+    color: var(--cor-preto);
+    background: #0aa2e9;
+}
+
+/* Container - Início */
+
+.container{
+    width: 100%;
+    padding: 3rem 0;
+}
+
+.container>div{
+    width: 90%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: column nowrap;
+    gap: 3rem;
+    min-height: 80vh;
+}
+
+.chat-cabecalho{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: column nowrap;
+    gap: 1rem;
+}
+
+.chat-cabecalho>div:nth-of-type(1){
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    flex-flow: row wrap;
+}
+
+.chat-cabecalho img{
+    max-width: 6rem;
+    height: 6rem;
+    border-radius: 50%;
+}
+
+.botoes-perfil{
+    width: 100%;
+    padding: 1rem;
+    display: flex;
+    flex-flow: row wrap;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.botoes-perfil a, .botoes-perfil button{
+    background: var(--cor-secundaria);
+    padding: 1rem 2rem;
+    border-radius: 10rem;
+    color: var(--cor-branco);
+    font-weight: bold;
+    transition: .3s;
+    border: none;
+    font-family: var(--fonte-paragrafos);
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.botoes-perfil a:hover, .botoes-perfil button:hover{
+    transform: scale(1.05);
+}
+
+.botoes-perfil button:nth-of-type(1){
+    background: #0d1d8b;
+}
+
+.botoes-perfil a:nth-of-type(3){
+    background: transparent;
+    color: red;
+    text-decoration: underline;
+}
+
+.chat{
+    border: 0.2rem solid var(--cor-cinza);
+    border-radius: 2rem;
+    width: 100%;
+    min-height: 60vh;
+    display: flex;
+    flex-flow: column nowrap;
+}
+
+.chat .mensagens{
+    height: 55vh;
+    width: 100%;
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 1.5rem;
+    background: #efebe2;
+    border-top-right-radius: 2rem;
+    border-top-left-radius: 2rem;
+    padding: 1rem;
+    overflow: auto;
+}
+
+.chat .mensagem{
+    width: 90%;
+    padding: 1rem;
+    border-radius: 2rem;
+    color: var(--cor-preto);
+    background: var(--cor-branco);
+    padding: 1rem;
+}
+
+.chat .mensagem span{
+    color: #969b98;
+    font-size: 1.3rem;
+    margin-left: 1rem;
+}
+
+.chat .mensagem.me{
+    background: #d8fdd2;
+    align-self: flex-end;
+}
+
+.chat form{
+    align-self: flex-end;
+    width: 100%;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    border-top: 0.2rem solid var(--cor-secundaria);
+}
+
+.chat form input.inputMsg{
+    width: 100%;
+    padding: 1rem;
+    border-radius: 10rem;
+    border: 0.2rem solid var(--cor-cinza);
+    transition: .3s;
+}
+
+.chat form input.inputMsg:focus{
+    transform: scale(1.005);
+}
+
+.chat form button{
+    background: transparent;
+    font-size: 3rem;
+    width: 3rem;
+    height: 3rem;
+    border: none;
+    color: var(--cor-secundaria);
+    opacity: 0.5;
+    transition: .3s;
+}
+
+.chat form button.enviar{
+    opacity: 1;
+    cursor: pointer;
+}
+
+.chat form button.enviar:hover{
+    transform: scale(1.1);
+}
+
+/* Container - Fim */
+
+@media(max-width: 350px){
+
+    html{
+        font-size: 50%;
+    }
+
+}

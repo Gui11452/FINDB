@@ -33,6 +33,12 @@
                             {% else %}
                                 <img src="{% static 'images/foto_user.png' %}" alt="{{perfil.nome}} - Perfil - FINDB">
                             {% endif %}
+                            {% if perfil.video %}
+                                <video controls controlsList="nodownload">
+                                    <source src="{{perfil.video.url}}">
+                                    Seu navegador não suporta a tag de vídeo.
+                                </video>
+                            {% endif %}
                             <h1>
                                 {{perfil.nome}}
                             </h1>
@@ -108,7 +114,11 @@
 
                         {% if not meu_perfil %}
                             <div class="botoes-perfil">
-
+                                <a href="{% url 'chat' perfil.slug %}" style="width: 100%; text-align: center; background: black;" class="convidar-evento">
+                                    <i class="fa-solid fa-comment-dots"></i>
+                                    Chat
+                                </a>
+                                
                                 <a href="{% url 'convidar_evento' perfil.slug %}" class="convidar-evento">
                                     <i class="fa-solid fa-location-dot"></i>
                                     Convidar para evento

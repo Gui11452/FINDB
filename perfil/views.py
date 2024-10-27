@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, reverse
-from .models import Perfil, RecuperacaoSenha, Cupido, Album, VideoChamada
+from .models import Perfil, RecuperacaoSenha, Cupido, Album, VideoChamada, MensagemChat
 from eventos.models import Notificacao, ParticipantesEvento, Evento
 from comunication.models import BloquearUsuarios
 from django.contrib import messages
@@ -30,6 +30,8 @@ import stripe
 from django.core.validators import validate_email
 from PIL import Image
 from pprint import pprint
+import json
+from django.utils.timezone import localtime
 
 
 def perfil(request, slug):
@@ -782,6 +784,7 @@ def registro(request):
     bebe = request.POST.get('bebe')
     descricao = request.POST.get('descricao')
     foto = request.FILES.get('foto', '')
+    video = request.FILES.get('video', '')
     aceitar_termos = request.POST.get('aceitar-termos', '')
     recaptcha = request.POST.get('g-recaptcha-response')
 
@@ -969,6 +972,7 @@ def registro(request):
         descricao=descricao,
         foto=foto,
         cupido=cupido,
+        video=video,
     )
 
     perfil.codigo = codigo
@@ -1025,6 +1029,7 @@ def alterar_dados(request):
         bebe = request.POST.get('bebe')
         descricao = request.POST.get('descricao')
         foto = request.FILES.get('foto', '')
+        video = request.FILES.get('video', '')
         recaptcha = request.POST.get('g-recaptcha-response')
         
         # Início - Recaptcha
@@ -1062,6 +1067,9 @@ def alterar_dados(request):
         
         if foto:
             perfil.foto = foto
+
+        if video:
+            perfil.video = video
             """ if Cupido.objects.filter(usuario=perfil.usuario).exists():
                 _cupido = Cupido.objects.get(usuario=perfil.usuario)
                 _cupido.foto = foto
@@ -1887,5 +1895,137 @@ def meus_eventos(request):
 
 
 
-""" def teste_sucesso(request):
-    return HttpResponse() """
+def chat(request, slug):
+    http_referer = request.META.get(
+        'HTTP_REFERER',
+        reverse('home')
+    )
+
+    if not request.user.is_authenticated:
+        return redirect('home')
+
+    if not Perfil.objects.filter(usuario=request.user, verificacao_email=True).exists():
+        return redirect('home')
+    my_perfil = Perfil.objects.get(usuario=request.user, verificacao_email=True)
+
+    if not Perfil.objects.filter(slug=slug).exists():
+        return redirect('home')
+    perfil = Perfil.objects.get(slug=slug)
+
+    # Verificação da assinatura - Início
+    if not Pedido.objects.filter(perfil=my_perfil, plano_ativo=True).exists():
+        messages.error(request, f'Você não tem nenhuma assinatura ativa. Contrate uma para poder ter acesso a funcionalidade: "Chat".')
+        return redirect('home')
+    # Verificação da assinatura - Fim
+    
+    if BloquearUsuarios.objects.filter(usuario=my_perfil, bloqueado=perfil).exists():
+        bloqueador_perfil = 1
+    elif BloquearUsuarios.objects.filter(usuario=perfil, bloqueado=my_perfil).exists():
+        bloqueador_perfil = 2
+    else:
+        bloqueador_perfil = 3
+
+    todas_notificacoes = get_perfil_notificacoes(request)
+    if todas_notificacoes == 'redirect':
+        return redirect('login')
+
+    mensagens = []
+    for mensagem in MensagemChat.objects.all():
+        if (mensagem.remetente == my_perfil 
+            or mensagem.destinatario == perfil) or (mensagem.destinatario == my_perfil 
+            or mensagem.remetente == perfil):
+            mensagem.recebida = True
+            mensagem.save()
+            mensagens.append(mensagem)
+
+    return render(request, 'chat.html', {
+        'bloqueador_perfil': bloqueador_perfil,
+        'perfil': perfil,
+        'mensagens': mensagens,
+    })
+
+
+
+def chat_receber_mensagem(request, slug):
+    if request.method != 'POST':
+        return JsonResponse({'error': "Method Not Post"})
+
+    if not request.user.is_authenticated:
+        return JsonResponse({'error': "User Not Authenticated"})
+
+    if not Perfil.objects.filter(usuario=request.user, verificacao_email=True).exists():
+        return JsonResponse({'error': "User Not Find Profile"})
+    my_perfil = Perfil.objects.get(usuario=request.user, verificacao_email=True)
+
+    if not Perfil.objects.filter(slug=slug).exists():
+        return JsonResponse({'error': "Slug Not In Profile"})
+    perfil = Perfil.objects.get(slug=slug)
+
+    # Verificação da assinatura - Início
+    if not Pedido.objects.filter(perfil=perfil, plano_ativo=True).exists():
+        return JsonResponse({'error': "Not Have Pedido"})
+    # Verificação da assinatura - Fim
+    
+    if BloquearUsuarios.objects.filter(usuario=my_perfil, bloqueado=perfil).exists():
+        return JsonResponse({'error': "Blocked"})
+
+    if MensagemChat.objects.filter(
+        remetente=perfil,
+        destinatario=my_perfil,
+        recebida=False,
+    ).exists():
+        mensagem_chat = MensagemChat.objects.filter(
+            remetente=perfil,
+            destinatario=my_perfil,
+            recebida=False,
+        ).last()
+        mensagem_chat.recebida = True
+        mensagem_chat.save()
+    else:
+        return JsonResponse({'error': 'Not Found'})
+
+    data_mensagem = mensagem_chat.data.strftime("%d/%m/%Y %H:%M")
+    return JsonResponse({'message': mensagem_chat.mensagem, 'data': data_mensagem})
+
+
+def chat_enviar_mensagem(request, slug):
+    if request.method != 'POST':
+        return JsonResponse({'error': "Method Not Post"})
+
+    dados = json.loads(request.body)
+    mensagem = dados.get('mensagem', '')
+
+    if not request.user.is_authenticated:
+        return JsonResponse({'error': "User Not Authenticated"})
+
+    if not Perfil.objects.filter(usuario=request.user, verificacao_email=True).exists():
+        return JsonResponse({'error': "User Not Find Profile"})
+    my_perfil = Perfil.objects.get(usuario=request.user, verificacao_email=True)
+
+    if not Perfil.objects.filter(slug=slug).exists():
+        return JsonResponse({'error': "Slug Not In Profile"})
+    perfil = Perfil.objects.get(slug=slug)
+
+    # Verificação da assinatura - Início
+    if not Pedido.objects.filter(perfil=perfil, plano_ativo=True).exists():
+        return JsonResponse({'error': "Not Have Pedido"})
+    # Verificação da assinatura - Fim
+    
+    if BloquearUsuarios.objects.filter(usuario=perfil, bloqueado=my_perfil).exists():
+        return JsonResponse({'error': "Blocked"})
+
+    mensagem_chat = MensagemChat.objects.create(
+        remetente=my_perfil,
+        destinatario=perfil,
+        mensagem=mensagem,
+    )
+    mensagem_chat.save()
+    
+    data_mensagem = mensagem_chat.data.strftime("%d/%m/%Y %H:%M")
+
+    return JsonResponse({'message': mensagem_chat.mensagem, 'data': data_mensagem})
+
+
+    
+
+    

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Perfil, Cupido, RecuperacaoSenha, Album, VideoChamada, ColaboradoresEvento
+from .models import Perfil, Cupido, RecuperacaoSenha, Album, VideoChamada, ColaboradoresEvento, MensagemChat
 from django.contrib.auth.models import User
 
 class PerfilAdmin(admin.ModelAdmin):
@@ -57,3 +57,13 @@ class VideoChamadaAdmin(admin.ModelAdmin):
     list_per_page = 10
 
 admin.site.register(VideoChamada, VideoChamadaAdmin)
+
+
+class MensagemChatAdmin(admin.ModelAdmin):
+    list_display = ('remetente', 'destinatario', 'data', 'recebida')
+    list_display_links = ('remetente', 'destinatario', 'data', 'recebida')
+    list_filter = ('data', 'recebida')
+    list_per_page = 10
+    search_fields = ('remetente__nome', 'destinatario__nome')
+
+admin.site.register(MensagemChat, MensagemChatAdmin)

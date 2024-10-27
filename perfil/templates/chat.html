@@ -1,0 +1,199 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block estilos %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/chat.css' %}">
+{% endblock %}
+{% block titulo %}
+    Chat - FINDB
+{% endblock %}
+
+{% block container %} 
+
+    <main class="container">
+        <div>
+            <div class="chat-cabecalho">
+                <div>
+                    <h2>
+                        Chat ({{perfil.nome}})
+                    </h2>
+                    {% if perfil.foto %}
+                        <a href="{% url 'perfil' perfil.slug %}">
+                            <img src="{{perfil.foto.url}}" alt="{{perfil.nome}} - FINDB">
+                        </a>
+                    {% else %}
+                        <img src="{% static 'images/foto_user.png' %}" alt="{{perfil.nome}} - Perfil - FINDB">
+                    {% endif %}
+                </div>
+                <!-- <div class="botoes-perfil">
+
+                    <a href="{% url 'convidar_evento' perfil.slug %}" class="convidar-evento">
+                        <i class="fa-solid fa-location-dot"></i>
+                        Convidar para evento
+                    </a>
+
+                    <form action="{% url 'send_notification_comunication' %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="slug_destinatario" value="{{perfil.slug}}">
+                        <input type="hidden" name="tipo" value="video">
+                        <button type="submit">
+                            <i class="fa-solid fa-video"></i>
+                            Chamada de vídeo
+                        </button>
+                    </form>
+
+                    <form action="{% url 'send_notification_comunication' %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="slug_destinatario" value="{{perfil.slug}}">
+                        <input type="hidden" name="tipo" value="audio">
+                        <button type="submit">
+                            <i class="fa-solid fa-phone"></i>
+                            Chamada de áudio
+                        </button>
+                    </form>
+
+                    {% if perfil.interesse != 'Eventos' and perfil.interesse != 'Terapias diversas' and perfil.interesse != 'Profissionais em relacionamento' %}
+                        <a href="" class="convidar-video">
+                            <i class="fa-solid fa-calendar-days"></i>
+                            Convidar para reunião
+                        </a>
+                    {% endif %}
+                    
+                    {% if not bloqueador_perfil %}
+                        <a href="{% url 'bloquear_usuario' perfil.slug %}" class="btn-bloquear">
+                            Bloquear usuário
+                        </a>
+                    {% else %}
+                        <a href="{% url 'desbloquear_usuario' perfil.slug %}" class="btn-desbloquear">
+                            Desbloquear usuário
+                        </a>
+                    {% endif %}
+                </div> -->
+
+                {% if bloqueador_perfil == 3 %}
+                    <div class="chat">
+                        <div class="mensagens">
+                            {% for mensagem in mensagens %}
+                                {% if mensagem.remetente.slug == request.session.get_perfil_slug %}
+                                    <p class="mensagem me">
+                                        {{mensagem.mensagem}}
+                                        <span>
+                                            {{mensagem.data|date:"d/m/Y H:i"}}	
+                                        </span>
+                                    </p>
+                                {% else %}
+                                    <p class="mensagem">
+                                        {{mensagem.mensagem}}
+                                        <span>
+                                            {{mensagem.data|date:"d/m/Y H:i"}}	
+                                        </span>
+                                    </p>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <form>
+                            <input type="text" class="inputMsg" name="mensagem" placeholder="Envie uma mensagem...">
+                            <button type="submit">
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </form>
+                    </div>
+                {% elif bloqueador_perfil == 2 %}
+                    <h3 style="color: red">Você foi bloqueado</h3>
+                {% else %}
+                    <h3 style="color: red">Você bloqueou esse usuário</h3>
+                {% endif %}
+            </div>
+        </div>
+    </main>
+
+{% endblock %}
+{% if bloqueador_perfil == 3 %}
+    {% block scripts %}
+        <script>
+
+            (function(){
+                const btnEnviarMsg = document.querySelector('.chat form button');
+                const inputMsg = document.querySelector('.chat form input.inputMsg');
+                const boxMensagens = document.querySelector('.chat .mensagens');
+                
+                boxMensagens.scrollTop = boxMensagens.scrollHeight;
+
+                setInterval(() => {
+                    fetch(`${wsProtocol}//${wsHost}/perfil/chat_receber_mensagem/{{perfil.slug}}/`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': '{{csrf_token}}',
+                        },
+                    }).then(response => response.json())
+                    .then(data => {
+                        if(data.message){
+                            inputMsg.value = '';
+                            const p = document.createElement('p');
+                            p.setAttribute('class', 'mensagem');
+                            p.innerHTML = data.message;
+
+                            const span = document.querySelector('span');
+                            span.innerHTML = data.data;
+
+                            p.appendChild(span);
+                            boxMensagens.appendChild(p);
+                            boxMensagens.scrollTop = boxMensagens.scrollHeight;
+                        }
+                    })
+                    .catch(error => {
+                        console.warn('Erro:', error); 
+                    });
+                }, 1000);
+
+                document.addEventListener('input', e => {
+                    if(inputMsg.value){
+                        btnEnviarMsg.classList.add('enviar');
+                    } else{
+                        btnEnviarMsg.classList.remove('enviar');
+                    }
+                })
+
+                document.addEventListener('submit', e => {
+                    e.preventDefault();
+
+                    if(btnEnviarMsg.classList.contains('enviar') && inputMsg.value){
+                        
+                        fetch(`${wsProtocol}//${wsHost}/perfil/chat_enviar_mensagem/{{perfil.slug}}/`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRFToken': '{{csrf_token}}',
+                            },
+                            body: JSON.stringify({
+                                mensagem: inputMsg.value,
+                            }) 
+                        }).then(response => response.json())
+                        .then(data => {
+                            if(data.message){
+                                inputMsg.value = '';
+                                const p = document.createElement('p');
+                                p.setAttribute('class', 'mensagem me');
+                                p.innerHTML = data.message;
+
+                                const span = document.querySelector('span');
+                                span.innerHTML = data.data;
+
+                                p.appendChild(span);
+                                boxMensagens.appendChild(p);
+                                boxMensagens.scrollTop = boxMensagens.scrollHeight;
+                                btnEnviarMsg.classList.remove('enviar');
+                            }
+                        })
+                        .catch(error => {
+                            //console.warn('Erro:', error); 
+                        });
+
+                    } 
+
+                })
+            }());
+            
+        </script>
+    {% endblock %}
+{% endif %}
